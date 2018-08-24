@@ -32,7 +32,10 @@ body {
     color: #0d308c !important;
     cursor: default !important;
 }
-.el-pager li:hover {
+.el-pager li:hover,.el-loading-spinner .el-loading-text{
     color: #0d308c !important;
+}
+.el-loading-spinner .path{
+ stroke:#0d308c !important;
 }
 </style>

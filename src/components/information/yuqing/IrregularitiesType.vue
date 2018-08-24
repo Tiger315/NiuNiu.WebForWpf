@@ -147,7 +147,7 @@
 </template>
 <script>
 import PDFJS from '../../../../static/js/pdfjs-1.10.88-dist/build/pdf.js'
-import $ from '../../../../static/js/jquery/jquery.min.js'
+import $ from 'jquery'
 export default {
   name: 'SupervisionType',
   data () {

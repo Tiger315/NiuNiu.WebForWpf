@@ -144,7 +144,7 @@ export default {
       }
     },
     showPDF (urls) {
-      console.log('Testing~~Testing~~')
+      // console.log('Testing~~Testing~~')
       // var that = this
       // this.zDialog = true
       // PDFJS.workerSrc = '../../../../static/js/pdfjs-1.10.88-dist/build/pdf.worker.js' // 加载核心库
