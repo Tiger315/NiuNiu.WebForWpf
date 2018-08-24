@@ -53,9 +53,9 @@
     <!--分页结束-->
 
     <!--dialog开始-->
-    <el-dialog :visible.sync="zDialog" fullscreen>
+    <el-dialog :visible.sync="zDialog" fullscreen :before-close="beforeClose">
       <div class="dialog-box" v-loading="zLoading" style="margin:0 auto;">
-        <iframe :src="showWordUrl" width="2000px" height="2000px" frameborder="0"></iframe>
+        <iframe :src="showWordUrl" width="80%" :height="dataHeight" frameborder="0" style="margin-left:10%;"></iframe>
       </div>
     </el-dialog>
     <!--dialog结束-->
@@ -144,6 +144,8 @@ export default {
       }
     },
     showPDF (urls) {
+      this.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
+      this.zDialog = true
       // console.log('Testing~~Testing~~')
       // var that = this
       // this.zDialog = true
@@ -158,6 +160,10 @@ export default {
       //   that.zLoading = false
       // })
       // that.pdfUrl = urls
+    },
+    beforeClose () {
+      this.showWordUrl = ''
+      this.zDialog = false
     },
     showWord (urls) {
       this.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
