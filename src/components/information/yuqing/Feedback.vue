@@ -27,12 +27,12 @@
     <!-- 表格数据开始 -->
     <el-table v-loading="zLoading" element-loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
       <el-table-column type="index" fixed="left" label="序号" width="70" :index="typeIndex">序号</el-table-column>
-      <el-table-column fixed="left" prop="Company_Code" label="证券代码" width="100"></el-table-column>
-      <el-table-column prop="Company_Name" label="证券简称" width="100"></el-table-column>
+      <el-table-column fixed="left" prop="Company_Code" label="证券代码" width="150"></el-table-column>
+      <el-table-column prop="Company_Name" label="证券简称" width="150"></el-table-column>
       <el-table-column prop="Letter_TypeValue" label="问询类型" width="150"></el-table-column>
       <el-table-column prop="Letter_ContentName" label="函件内容">
         <template slot-scope="scope">
-          <span style="color: #0d308c; cursor: pointer; font" @click="showPDF(scope.row.Letter_ContentName)">{{ scope.row.Letter_ContentName}}</span>
+          <span style="color: #0d308c; cursor: pointer; font" @click="showPDF(scope.row.Letter_Content)">{{ scope.row.Letter_ContentName}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="Company_ReplyName" label="公司回复">
@@ -152,6 +152,7 @@ export default {
       }
     },
     showPDF (urls) {
+      console.log('Testing~~Testing~~')
       var that = this
       this.zDialog = true
       PDFJS.workerSrc = '../../../../static/js/pdfjs-1.10.88-dist/build/pdf.worker.js' // 加载核心库
