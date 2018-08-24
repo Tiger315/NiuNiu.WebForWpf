@@ -32,7 +32,7 @@
       <el-table-column prop="Letter_TypeValue" label="问询类型" width="150"></el-table-column>
       <el-table-column prop="Letter_ContentName" label="函件内容">
         <template slot-scope="scope">
-          <span style="color: #0d308c; cursor: pointer; font" @click="showPDF('54eeb0f2-fa96-487d-ae09-7a820677a696..pdf')">{{ scope.row.Letter_ContentName}}</span>
+          <span style="color: #0d308c; cursor: pointer; font" @click="showPDF(scope.row.Letter_ContentName)">{{ scope.row.Letter_ContentName}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="Company_ReplyName" label="公司回复">
@@ -60,7 +60,7 @@
       </a>
       <div class="dialog-box" v-loading="zLoading" style="margin:0 auto;">
         <div class="showPDF" id="pop">
-          <canvas id="the-canvas"></canvas>
+          <!-- <canvas id="the-canvas"></canvas> -->
         </div>
       </div>
     </el-dialog>
@@ -70,7 +70,7 @@
 
 <script>
 import PDFJS from '../../../../static/js/pdfjs-1.10.88-dist/build/pdf.js'
-import $ from '../../../../static/js/jquery/jquery.min.js'
+import $ from 'jquery'
 export default {
   name: 'Feedback',
   data () {
