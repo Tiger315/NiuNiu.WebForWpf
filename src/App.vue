@@ -25,14 +25,14 @@ body {
   height: 100%;
 }
 .el-button--primary{
-  background-color: #0d308c;
-  border-color: #0d308c;
+  background-color: #0d308c !important;
+  border-color: #0d308c !important;
 }
 .el-pager li.active {
-    color: #0d308c;
-    cursor: default;
+    color: #0d308c !important;
+    cursor: default !important;
 }
 .el-pager li:hover {
-    color: #0d308c;
+    color: #0d308c !important;
 }
 </style>
