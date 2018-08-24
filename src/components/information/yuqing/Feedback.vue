@@ -32,12 +32,12 @@
       <el-table-column prop="Letter_TypeValue" label="问询类型" width="150"></el-table-column>
       <el-table-column prop="Letter_ContentName" label="函件内容">
         <template slot-scope="scope">
-          <span style="color: #0d308c; cursor: pointer; font" @click="showPDF(scope.row.Letter_Content)">{{ scope.row.Letter_ContentName}}</span>
+          <span style="color: #0d308c; cursor: pointer; font" @click="showWord(scope.row.Letter_Content)">{{ scope.row.Letter_ContentName }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="Company_ReplyName" label="公司回复">
         <template slot-scope="scope">
-          <span style="color: #0d308c; cursor: pointer; font" @click="showPDF(scope.row.Company_Reply)">{{ scope.row.Company_ReplyName}}</span>
+          <span style="color: #0d308c; cursor: pointer; font" @click="showPDF(scope.row.Company_Reply)">{{ scope.row.Company_ReplyName }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="SendDate" width="150" label="发函日期"></el-table-column>
@@ -52,25 +52,17 @@
     </div>
     <!--分页结束-->
 
-    <!--查看明细dialog开始-->
-    <el-dialog :visible.sync="zDialog" :before-close="closeModel" style="font-weight: bold;margin:0px;text-align:center;" fullscreen>
-      <a class="downLoad" :href="pdfUrl" download="">
-        <i class="el-icon-download"></i>
-        <p>下载PDF</p>
-      </a>
+    <!--dialog开始-->
+    <el-dialog :visible.sync="zDialog" fullscreen>
       <div class="dialog-box" v-loading="zLoading" style="margin:0 auto;">
-        <div class="showPDF" id="pop">
-          <canvas id="the-canvas"></canvas>
-        </div>
+        <iframe :src="showWordUrl" width="2000px" height="2000px" frameborder="0"></iframe>
       </div>
     </el-dialog>
-    <!--查看明细dialog结束-->
+    <!--dialog结束-->
   </div>
 </template>
 
 <script>
-// import PDFJS from '../../../../static/js/pdfjs-1.10.88-dist/build/pdf.js'
-// import $ from '../../../../static/js/jquery/jquery.min.js'
 export default {
   name: 'Feedback',
   data () {
@@ -78,7 +70,7 @@ export default {
       dataHeight: document.documentElement.clientHeight - 135,
       zDialog: false,
       zLoading: false,
-      pdfUrl: '',
+      showWordUrl: '',
       searchParam: {
         time: '',
         titleMust: '', // 必含关键词
@@ -166,6 +158,10 @@ export default {
       //   that.zLoading = false
       // })
       // that.pdfUrl = urls
+    },
+    showWord (urls) {
+      this.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
+      this.zDialog = true
     },
     showall (url, page, id) {
       // PDFJS.getDocument(url).then(function getPdfHelloWorld (pdf) {
