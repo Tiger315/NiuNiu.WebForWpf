@@ -5,7 +5,7 @@ import Feedback from '@/components/information/yuqing/feedback' // 舆情违规�
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   routes: [
     {
       path: '/yuqing/feedback',
