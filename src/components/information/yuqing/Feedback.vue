@@ -32,7 +32,7 @@
       <el-table-column prop="Letter_TypeValue" label="问询类型" width="150"></el-table-column>
       <el-table-column prop="Letter_ContentName" label="函件内容">
         <template slot-scope="scope">
-          <span style="color: #0d308c; cursor: pointer; font" @click="showPDF('54eeb0f2-fa96-487d-ae09-7a820677a696..pdf')">{{ scope.row.Letter_ContentName}}</span>
+          <span style="color: #0d308c; cursor: pointer; font" @click="showPDF(scope.row.Letter_Content)">{{ scope.row.Letter_ContentName}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="Company_ReplyName" label="公司回复">
@@ -152,36 +152,37 @@ export default {
       }
     },
     showPDF (urls) {
-      var that = this
-      this.zDialog = true
-      PDFJS.workerSrc = '../../../../static/js/pdfjs-1.10.88-dist/build/pdf.worker.js' // 加载核心库
-      $('#pop').empty()
-      PDFJS.getDocument(urls).then(function getPdfHelloWorld (pdf) {
-        for (var i = 1; i < pdf.numPages; i++) {
-          var id = 'page-id-' + i
-          $('#pop').append('<div style="text-align:center"><canvas id="' + id + '"></canvas><div>')
-          that.showall(urls, i, id)
-        }
-        that.zLoading = false
-      })
-      that.pdfUrl = urls
+      console.log('Testing~~Testing~~')
+      // var that = this
+      // this.zDialog = true
+      // PDFJS.workerSrc = '../../../../static/js/pdfjs-1.10.88-dist/build/pdf.worker.js' // 加载核心库
+      // $('#pop').empty()
+      // PDFJS.getDocument(urls).then(function getPdfHelloWorld (pdf) {
+      //   for (var i = 1; i < pdf.numPages; i++) {
+      //     var id = 'page-id-' + i
+      //     $('#pop').append('<div style="text-align:center"><canvas id="' + id + '"></canvas><div>')
+      //     that.showall(urls, i, id)
+      //   }
+      //   that.zLoading = false
+      // })
+      // that.pdfUrl = urls
     },
     showall (url, page, id) {
-      PDFJS.getDocument(url).then(function getPdfHelloWorld (pdf) {
-        pdf.getPage(page).then(function getPageHelloWorld (page) {
-          var scale = 1.0
-          var viewport = page.getViewport(scale)
-          var canvas = document.getElementById(id)
-          var context = canvas.getContext('2d')
-          canvas.height = viewport.height
-          canvas.width = viewport.width
-          var renderContext = {
-            canvasContext: context,
-            viewport: viewport
-          }
-          page.render(renderContext)
-        })
-      })
+      // PDFJS.getDocument(url).then(function getPdfHelloWorld (pdf) {
+      //   pdf.getPage(page).then(function getPageHelloWorld (page) {
+      //     var scale = 1.0
+      //     var viewport = page.getViewport(scale)
+      //     var canvas = document.getElementById(id)
+      //     var context = canvas.getContext('2d')
+      //     canvas.height = viewport.height
+      //     canvas.width = viewport.width
+      //     var renderContext = {
+      //       canvasContext: context,
+      //       viewport: viewport
+      //     }
+      //     page.render(renderContext)
+      //   })
+      // })
     },
     getTopData () {
       var that = this
