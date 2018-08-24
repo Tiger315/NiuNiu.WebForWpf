@@ -76,7 +76,7 @@
           <!--分页结束-->
       </el-container>
   </el-container>
-    <el-dialog  :visible.sync="zDialog" style="font-weight: bold;margin:0px;" fullscreen>
+    <el-dialog  :visible.sync="zDialog" style="font-weight: bold;margin:0px;" fullscreen  :before-close="beforeClose">
       <div class="dialog-box" v-loading="zLoading">
         <el-container :height="leftModelHeight">
           <el-aside width="33.3%" >
@@ -124,10 +124,9 @@
           </el-aside>
           <el-container>
             <el-header class="showPdf" height="300">
-              <div class="dialog-box" v-loading="zLoading">
+              <div class="dialog-box dialog-box1" v-loading="zLoadings">
                 <div v-if="zDetail.docUrl=='' || zDetail.docUrl==null " class="pdfTitle" v-html="zDetail.docContent"></div>
-                <div v-if="zDetail.docUrl!='' && zDetail.docUrl!=null " class="showPDF" id="pop">
-                </div>
+                <pdf v-if="zDetail.docUrl!='' && zDetail.docUrl!=null"  :src="pdfUrl" v-for="i in numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; height:650px;width: 80%;margin-left:10%;"></pdf>
             </div>
             </el-header>
             <el-main class="table2" >
@@ -141,13 +140,12 @@
           </el-container>
         </el-container>
       </div>
-
     </el-dialog>
   </div>
 </template>
 <script>
-import PDFJS from '../../../../static/js/pdfjs-1.10.88-dist/build/pdf.js'
-import $ from 'jquery'
+import pdf from 'vue-pdf'
+var loadingTask = pdf.createLoadingTask('https://cdn.mozilla.net/pdfjs/tracemonkey.pdf')
 export default {
   name: 'SupervisionType',
   data () {
@@ -157,7 +155,10 @@ export default {
       dataHeight: document.documentElement.clientHeight - 305,
       zDialog: false,
       zLoading: true,
+      zLoadings: false,
       msgId: '',
+      pdfUrl: loadingTask,
+      numPages: undefined,
       searchParam: {
         titleMust: '', // 必含关键词
         titleCan: '', // 可含关键词
@@ -197,9 +198,11 @@ export default {
         StockInfo: []
       },
       treeData: [],
-      violationCase: [],
-      pdfUrl: ''
+      violationCase: []
     }
+  },
+  components: {
+    pdf
   },
   methods: {
     typeIndex (index) {
@@ -303,8 +306,9 @@ export default {
             that.zDetail.docUrl = ''
           }
           that.zDetail = data
-          if (that.zDetail.docUrl) {
-            that.showPDF(data.docUrl)
+          if (that.zDetail.docUrl) { // 展示PDF
+            that.pdfUrl = that.zDetail.docUrl
+            that.zLoadings = true
           }
         })
         // 相关案例
@@ -326,38 +330,14 @@ export default {
           that.tableData = response.data.Result.Data
         })
     },
-    showPDF (urls) {
-      var that = this
-      this.zDialog = true
-      PDFJS.workerSrc = '../../../../static/js/pdfjs-1.10.88-dist/build/pdf.worker.js' // 加载核心库
-      $('#pop').empty()
-      PDFJS.getDocument(urls).then(function getPdfHelloWorld (pdf) {
-        for (var i = 1; i < pdf.numPages; i++) {
-          var id = 'page-id-' + i
-          $('#pop').append('<div style="text-align:center"><canvas id="' + id + '"></canvas><div>')
-          that.showall(urls, i, id)
-        }
-        that.zLoading = false
-      })
-      that.pdfUrl = urls
+    pdfLoaded () { // pdf加载完后清除loading
+      this.zLoadings = false
     },
-    showall (url, page, id) {
-      PDFJS.getDocument(url).then(function getPdfHelloWorld (pdf) {
-        pdf.getPage(page).then(function getPageHelloWorld (page) {
-          var scale = 1.0
-          var viewport = page.getViewport(scale)
-          var canvas = document.getElementById(id)
-          var context = canvas.getContext('2d')
-          canvas.height = viewport.height
-          canvas.width = viewport.width
-          var renderContext = {
-            canvasContext: context,
-            viewport: viewport
-          }
-          page.render(renderContext)
-        })
-      })
+    beforeClose () { // 弹窗关闭之前清除数据
+      this.pdfUrl = ''
+      this.zDialog = false
     }
+
   },
   created () {
     this.loadTopMenu()
@@ -372,11 +352,19 @@ export default {
         that.leftHeight = document.documentElement.clientHeight - 35
       })()
     }
+    if (this.pdfUrl) {
+      this.pdfUrl.then(pdf => {
+        this.numPages = pdf.numPages
+      })
+    }
   }
 
 }
 </script>
 <style>
+.annotationLayer{
+  transform: scale(1) !important;
+}
 .el-input__inner{
   height: 32px;
   line-height:32px;
@@ -426,6 +414,12 @@ export default {
 }
 .SupervisionType .el-dialog__headerbtn{
     top: 0px;
+}
+.dialog-box1 .el-loading-mask{
+  background-color:rgba(0,0,0,0);
+   width:40% !important;
+  margin-left:30%;
+  max-height:650px;
 }
 </style>
 
@@ -490,16 +484,18 @@ span.detail_date {
     font-size: 16px;
     margin-bottom: 10px;
 }
-.showPdf{
-  margin-bottom:20px;
-  overflow-y:scroll ;
-  max-height:650px;
-}
-#pop{
-  background-color: #525659;
+
+.dialog-box1{
   padding-top:10px;
   padding-bottom:10px;
+   margin-bottom:20px;
+  overflow-y:scroll ;
+  overflow-x: hidden;
+  max-height:650px;
+  width:100%;
+  background-color: #525659;
 }
+
 .card-head{
     padding: 0 20px;
     height: 40px;

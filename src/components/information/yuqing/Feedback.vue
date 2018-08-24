@@ -55,14 +55,16 @@
     <!--dialog开始-->
     <el-dialog :visible.sync="zDialog" fullscreen :before-close="beforeClose">
       <div class="dialog-box" v-loading="zLoading" style="margin:0 auto;">
-        <iframe :src="showWordUrl" width="80%" :height="dataHeight" frameborder="0" style="margin-left:10%;"></iframe>
+        <iframe v-if="showWordUrl" :src="showWordUrl" width="80%" :height="dataHeight" frameborder="0" style="margin-left:10%;"></iframe>
+        <pdf v-if="pdfUrl" :src="pdfUrl" v-for="i in numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; width: 40%;margin-left:30%;"></pdf>
       </div>
     </el-dialog>
     <!--dialog结束-->
   </div>
 </template>
-
 <script>
+import pdf from 'vue-pdf'
+var loadingTask = pdf.createLoadingTask('https://cdn.mozilla.net/pdfjs/tracemonkey.pdf')
 export default {
   name: 'Feedback',
   data () {
@@ -71,6 +73,8 @@ export default {
       zDialog: false,
       zLoading: false,
       showWordUrl: '',
+      pdfUrl: loadingTask,
+      numPages: undefined,
       searchParam: {
         time: '',
         titleMust: '', // 必含关键词
@@ -96,7 +100,11 @@ export default {
         count: 11,
         currentPage: 1
       }
+
     }
+  },
+  components: {
+    pdf
   },
   methods: {
     closeModel () {
@@ -143,48 +151,22 @@ export default {
         this.searchParam.spliteStockCode = ''
       }
     },
-    showPDF (urls) {
+    showPDF (urls) { // 展示pdf
+      this.pdfUrl = urls
+      this.zDialog = true
+      this.zLoading = true
+    },
+    showWord (urls) { // 展示word
       this.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
       this.zDialog = true
-      // console.log('Testing~~Testing~~')
-      // var that = this
-      // this.zDialog = true
-      // PDFJS.workerSrc = '../../../../static/js/pdfjs-1.10.88-dist/build/pdf.worker.js' // 加载核心库
-      // $('#pop').empty()
-      // PDFJS.getDocument(urls).then(function getPdfHelloWorld (pdf) {
-      //   for (var i = 1; i < pdf.numPages; i++) {
-      //     var id = 'page-id-' + i
-      //     $('#pop').append('<div style="text-align:center"><canvas id="' + id + '"></canvas><div>')
-      //     that.showall(urls, i, id)
-      //   }
-      //   that.zLoading = false
-      // })
-      // that.pdfUrl = urls
     },
-    beforeClose () {
+    pdfLoaded () { // pdf加载完后清除loading
+      this.zLoading = false
+    },
+    beforeClose () { // 弹窗关闭之前清除数据
+      this.pdfUrl = ''
       this.showWordUrl = ''
       this.zDialog = false
-    },
-    showWord (urls) {
-      this.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
-      this.zDialog = true
-    },
-    showall (url, page, id) {
-      // PDFJS.getDocument(url).then(function getPdfHelloWorld (pdf) {
-      //   pdf.getPage(page).then(function getPageHelloWorld (page) {
-      //     var scale = 1.0
-      //     var viewport = page.getViewport(scale)
-      //     var canvas = document.getElementById(id)
-      //     var context = canvas.getContext('2d')
-      //     canvas.height = viewport.height
-      //     canvas.width = viewport.width
-      //     var renderContext = {
-      //       canvasContext: context,
-      //       viewport: viewport
-      //     }
-      //     page.render(renderContext)
-      //   })
-      // })
     },
     getTopData () {
       var that = this
@@ -215,11 +197,21 @@ export default {
         that.dataHeight = document.documentElement.clientHeight - 135
       })()
     }
+    if (this.pdfUrl) {
+      this.pdfUrl.then(pdf => {
+        this.numPages = pdf.numPages
+      })
+    }
   }
 
 }
 </script>
 <style>
+.dialog-box .el-loading-mask{
+  width:40% !important;
+  margin-left:30%;
+  background-color:rgba(0,0,0,0);
+}
 .noMl.ml20 {
   margin-left: 0px;
 }
