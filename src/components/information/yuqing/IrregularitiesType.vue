@@ -45,9 +45,10 @@
           </el-container>
         </el-header>
         <!-- 搜索条件结束 -->
+         <!--表格开始-->
         <el-main :height="dataHeight">
-            <!--表格开始-->
-              <el-table v-loading="loading" element-loading-text="拼命加载中" :data="violationCaseData" stripe style="width: 100%;" row-key="id">
+
+              <el-table v-loading="loading" element-loading-text="拼命加载中" :data="detailData.violationCaseData" stripe style="width: 100%;" row-key="id">
                 <el-table-column type="index" fixed="left" width="70"  label="序号" :index="typeIndex"></el-table-column>
                 <el-table-column fixed="left" prop="title" label="标题" min-width="280" fit show-overflow-tooltip>
                   <template slot-scope="scope">
@@ -63,8 +64,8 @@
                 <el-table-column prop="supervisionOrganName" label="处理人" width="200"></el-table-column>
                 <el-table-column :formatter="processDate"  width="150" label="更新时间"></el-table-column>
               </el-table>
-            <!--表格结束-->
         </el-main>
+          <!--表格结束-->
         <!--分页开始-->
         <el-footer height="45">
           <div style="text-align: center;width:100%; margin-top: 10px; ">
@@ -84,12 +85,12 @@
               <div class="detail-card">
               <div class="card-head">基本信息</div>
                   <div class="card-body">
-                    <p>证券代码：{{baseInfoData.companyCode}}</p>
-                    <p>证券简称：{{baseInfoData.companyName}}</p>
-                    <p>所属板块：{{baseInfoData.companyMarketName}}</p>
-                    <p>所属地区：{{baseInfoData.companyArea}}</p>
-                    <p>所属行业：{{baseInfoData.companyIndustry}}</p>
-                    <p>申辩情况：{{baseInfoData.avermentName}}</p>
+                    <p>证券代码：{{detailData.baseInfoData.companyCode}}</p>
+                    <p>证券简称：{{detailData.baseInfoData.companyName}}</p>
+                    <p>所属板块：{{detailData.baseInfoData.companyMarketName}}</p>
+                    <p>所属地区：{{detailData.baseInfoData.companyArea}}</p>
+                    <p>所属行业：{{detailData.baseInfoData.companyIndustry}}</p>
+                    <p>申辩情况：{{detailData.baseInfoData.avermentName}}</p>
                   </div>
               </div>
             </div>
@@ -97,11 +98,11 @@
               <div class="detail-card">
               <div class="card-head">违规信息</div>
                   <div class="card-body">
-                    <p>监管机构：{{baseInfoData.supervisionOrganName}}</p>
-                    <p>文号：{{baseInfoData.lssuedNumber}}</p>
-                    <p>监管类型：{{baseInfoData.supervisionTypeName}}</p>
-                    <p>违规类型：{{baseInfoData.violationTypeName}}</p>
-                    <p>处理日期：{{baseInfoData.processDate}}</p>
+                    <p>监管机构：{{detailData.baseInfoData.supervisionOrganName}}</p>
+                    <p>文号：{{detailData.baseInfoData.lssuedNumber}}</p>
+                    <p>监管类型：{{detailData.baseInfoData.supervisionTypeName}}</p>
+                    <p>违规类型：{{detailData.baseInfoData.violationTypeName}}</p>
+                    <p>处理日期：{{detailData.baseInfoData.processDate}}</p>
                   </div>
               </div>
             </div>
@@ -109,15 +110,15 @@
               <div class="detail-card">
               <div class="card-head">相关案例</div>
                   <div class="card-body">
-                    <p v-for="val in relationCaseData"  :key="val.id" @click="getDetail (val.relationXgal_id)">{{val.title}}</p>
+                    <p v-for="val in detailData.relationCaseData"  :key="val.id" @click="getDetail (val.relationXgal_id)">{{val.title}}</p>
                   </div>
               </div>
             </div>
              <div>
-              <div class="detail-card" :v-if="xgfgLawData">
+              <div class="detail-card" :v-if="detailData.xgfgLawData">
               <div class="card-head">相关法规</div>
                   <div class="card-body">
-                    <p v-for="val in xgfgLawData"  :key="val.id" @click="getDetail (val.relationXgfg_id)">{{val.title}}</p>
+                    <p v-for="val in detailData.xgfgLawData"  :key="val.id" @click="getDetail (val.relationXgfg_id)">{{val.title}}</p>
                   </div>
               </div>
             </div>
@@ -125,8 +126,8 @@
           <el-container>
             <el-header class="showPdf" height="300" style="padding:0 10px;">
               <div class="dialog-box dialog-box1" v-loading="detLoading">
-                <div v-if="baseInfoData.docUrl=='' || baseInfoData.docUrl==null " class="pdfTitle" v-html="baseInfoData.docContent"></div>
-                <iframe :src="pdfUrl" v-if="baseInfoData.docUrl!='' && baseInfoData.docUrl!=null" frameborder="0" :height="640"  style="width:100%;margin-top:0px;"></iframe>
+                <div v-if="detailData.baseInfoData.docUrl=='' || detailData.baseInfoData.docUrl==null " class="pdfTitle" v-html="detailData.baseInfoData.docContent"></div>
+                <iframe :src="pdfUrl" v-if="detailData.baseInfoData.docUrl!='' && detailData.baseInfoData.docUrl!=null" frameborder="0" :height="640"  style="width:100%;margin-top:0px;"></iframe>
                 <!-- <pdf v-if="detail.docUrl!='' && detail.docUrl!=null"  :src="pdfUrl" v-for="i in numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; height:650px;width: 80%;margin-left:10%;"></pdf> -->
             </div>
             </el-header>
@@ -194,11 +195,12 @@ export default {
         area: ['沪市主板', '深市主板', '深市中小板', '深市创业板', '新三板', '其他'],
         chufaRole: ['上市公司', '上市公司实际控制人、控股股东', '上市公司5%以上股东', '上市公司其他股东', '上市公司董事', '上市公司监事', '上市公司高级管理人员', '上市公司子公司', '中介机构', '其他']
       },
-
-      baseInfoData: {}, // 基本信息
-      relationCaseData: [], // 相关案例
-      xgfgLawData: [], // 相关法规
-      violationCaseData: []// 违规案例
+      detailData: {
+        baseInfoData: {}, // 基本信息
+        relationCaseData: [], // 相关案例
+        xgfgLawData: [], // 相关法规
+        violationCaseData: []// 违规案例
+      }
     }
   },
   components: {
@@ -220,7 +222,7 @@ export default {
       this.searchList()
     },
     showDetail (id) {
-      this.baseInfoData = {}
+      this.detailData.baseInfoData = {}
       this.dialog = true
       this.searchId = id
       this.getDetail(this.searchId)
@@ -232,7 +234,7 @@ export default {
       that.$ajax.get(searchParams)
         .then(function (response) {
           that.loading = false
-          that.violationCaseData = response.data.Result.Data
+          that.detailData.violationCaseData = response.data.Result.Data
           that.searchParam.total = response.data.Result.Total
         })
     },
@@ -303,24 +305,24 @@ export default {
             data['processDate'] = that.dealDate(data['processDate'] - 0)
           } else {
             data = []
-            that.baseInfoData.docUrl = ''
+            that.detailData.baseInfoData.docUrl = ''
           }
-          that.baseInfoData = data
-          if (that.baseInfoData.docUrl) { // 展示PDF
-            that.pdfUrl = that.baseInfoData.docUrl
+          that.detailData.baseInfoData = data
+          if (that.detailData.baseInfoData.docUrl) { // 展示PDF
+            that.pdfUrl = that.detailData.baseInfoData.docUrl
           }
         })
         // 相关案例
       that.$ajax
         .get(that.apiPath + '/XA_Wgal_RelationXgal?xa_id=' + row)
         .then(function (response) {
-          that.relationCaseData = response.data.Result.Data
+          that.detailData.relationCaseData = response.data.Result.Data
         })
       // 相关法规
       that.$ajax
         .get(that.apiPath + '/XA_Wgal_RelationXgfg?xa_id=' + row)
         .then(function (response) {
-          that.xgfgLawData = response.data.Result.Data
+          that.detailData.xgfgLawData = response.data.Result.Data
         })
         // 涉及当事人
       that.$ajax
