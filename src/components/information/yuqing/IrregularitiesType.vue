@@ -125,8 +125,8 @@
           <el-container>
             <el-header class="showPdf" height="300" style="padding:0 10px;">
               <div class="dialog-box dialog-box1" v-loading="detLoading">
-                <div v-if="detail.docUrl=='' || detail.docUrl==null " class="pdfTitle" v-html="detail.docContent"></div>
-                <iframe :src="pdfUrl" v-if="detail.docUrl!='' && detail.docUrl!=null" frameborder="0" :height="640"  style="width:100%;margin-top:0px;"></iframe>
+                <div v-if="baseInfoData.docUrl=='' || baseInfoData.docUrl==null " class="pdfTitle" v-html="baseInfoData.docContent"></div>
+                <iframe :src="pdfUrl" v-if="baseInfoData.docUrl!='' && baseInfoData.docUrl!=null" frameborder="0" :height="640"  style="width:100%;margin-top:0px;"></iframe>
                 <!-- <pdf v-if="detail.docUrl!='' && detail.docUrl!=null"  :src="pdfUrl" v-for="i in numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; height:650px;width: 80%;margin-left:10%;"></pdf> -->
             </div>
             </el-header>
