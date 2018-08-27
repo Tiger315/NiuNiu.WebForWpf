@@ -56,7 +56,7 @@
                 {{scope.row.companyName}}{{scope.row.companyCode?"("+scope.row.companyCode+")":""}}
               </template>
             </el-table-column>
-            <el-table-column prop="violationTypeName" label="违规类型" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="violationTypeName" label="违规类型" min-width="200" fit show-overflow-tooltip></el-table-column>
             <el-table-column prop="supervisionOrganName" label="监管机构"></el-table-column>
             <el-table-column :formatter="processDate" width="150" label="更新时间"></el-table-column>
           </el-table>
@@ -333,7 +333,6 @@ export default {
       this.pdfUrl = ''
       this.dialog = false
     }
-
   },
   created () {
     this.loadTopMenu()
