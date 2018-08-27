@@ -3,7 +3,10 @@
     <el-container :height="leftHeight">
       <el-aside width="20%" :height="leftHeight" class="left">
         <div class="title">违规类型</div>
-        <el-tree :data="treeData"></el-tree>
+        <div style="display: -ms-flexbox;display: flex;-ms-flex-direction: row;flex-direction: row;-ms-flex: 1;flex: 1;-ms-flex-preferred-size: auto;flex-basis: auto;box-sizing: border-box;min-width: 0;">
+          <el-tree :data="treeData"></el-tree>
+        </div>
+
       </el-aside>
       <el-container>
         <!-- 搜索条件开始 -->
