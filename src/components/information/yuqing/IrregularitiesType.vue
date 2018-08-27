@@ -123,7 +123,7 @@
             </div>
           </el-aside>
           <el-container>
-            <el-header class="showPdf" height="300">
+            <el-header class="showPdf" height="300" style="padding:0 10px;">
               <div class="dialog-box dialog-box1" v-loading="zLoadings">
                 <div v-if="zDetail.docUrl=='' || zDetail.docUrl==null " class="pdfTitle" v-html="zDetail.docContent"></div>
                 <iframe :src="pdfUrl" v-if="zDetail.docUrl!='' && zDetail.docUrl!=null" frameborder="0" :height="640"  style="width:100%;margin-top:0px;"></iframe>
