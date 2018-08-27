@@ -18,26 +18,26 @@
             <el-select multiple collapse-tags clearable size="small" v-model="searchParam.companyCode"  placeholder="请输入公司代码、简称" filterable>
               <el-option :label="item.Name+'('+item.Code+')'" :key="item.Name+'('+item.Code+')'" v-for='item in topData.StockInfo' :value="item.Code" ></el-option>
             </el-select>
-            <el-select collapse-tags multiple clearable size="small" v-model="searchParam.involveObjectId"  placeholder="处罚对象身份" filterable>
-              <el-option :value="item" :key="item"  v-for='item in condition.chufaRole'></el-option>
+            <!-- <el-select collapse-tags multiple clearable size="small" v-model="searchParam.involveObjectId"  placeholder="处罚对象身份" filterable>
+              <el-option :value="item" :key="item"  v-for='item in topData.chufaRole'></el-option>
             </el-select>
             <el-select collapse-tags clearable size="small" v-model="searchParam.avermentId" placeholder="申辩情况" filterable>
-              <el-option :value="item" :key="item" v-for='item in condition.shenbian'></el-option>
+              <el-option :value="item" :key="item" v-for='item in topData.shenbian'></el-option>
             </el-select>
             <el-select collapse-tags clearable size="small" placeholder="处罚机构" v-model="searchParam.supervisionOrganId" filterable>
               <el-option :value="item.name" :key="item.id" v-for='item in topData.jys'></el-option>
-            </el-select>
-          </el-container>
-          <el-container style="margin-top: 10px;margin-bottom:10px;">
-            <el-select collapse-tags clearable size="small" placeholder="所属板块" v-model="searchParam.companyMarketId" filterable>
-              <el-option :value="item" :key="item" v-for='item in condition.area'></el-option>
+            </el-select> -->
+             <el-select collapse-tags clearable size="small" placeholder="所属板块" v-model="searchParam.companyMarketId" filterable>
+              <el-option :value="item" :key="item" v-for='item in topData.area'></el-option>
             </el-select>
             <el-select collapse-tags clearable size="small"  placeholder="所属行业" v-model="searchParam.industryInfo" filterable>
               <el-option :value="item.name" :key="item.id" v-for='item in topData.industry'></el-option>
             </el-select>
             <el-select  collapse-tags clearable size="small" placeholder="所属地区" v-model="searchParam.companyArea" filterable>
-              <el-option :value="item" :key="item" v-for='item in condition.procvince'></el-option>
+              <el-option :value="item" :key="item" v-for='item in topData.procvince'></el-option>
             </el-select>
+          </el-container>
+          <el-container style="margin-top: 10px;margin-bottom:10px;">
             <div>
               <el-button type="primary" icon="el-icon-search" size="small" @click="searchList">搜索</el-button>
               <el-button type="warning"  size="small" @click="clearParam" >清空搜索</el-button>
@@ -47,7 +47,7 @@
         <!-- 搜索条件结束 -->
         <el-main :height="dataHeight">
             <!--表格开始-->
-              <el-table v-loading="zLoading" element-loading-text="拼命加载中" :data="violationCase" stripe style="width: 100%;" row-key="id">
+              <el-table v-loading="loading" element-loading-text="拼命加载中" :data="violationCaseData" stripe style="width: 100%;" row-key="id">
                 <el-table-column type="index" fixed="left" width="70"  label="序号" :index="typeIndex"></el-table-column>
                 <el-table-column fixed="left" prop="title" label="标题" min-width="280" fit show-overflow-tooltip>
                   <template slot-scope="scope">
@@ -76,20 +76,20 @@
           <!--分页结束-->
       </el-container>
   </el-container>
-    <el-dialog  :visible.sync="zDialog" style="font-weight: bold;margin:0px;" fullscreen  :before-close="beforeClose">
-      <div class="dialog-box" v-loading="zLoading">
+    <el-dialog  :visible.sync="dialog" style="font-weight: bold;margin:0px;" fullscreen  :before-close="beforeClose">
+      <div class="dialog-box" v-loading="loading">
         <el-container :height="leftModelHeight">
           <el-aside width="33.3%" >
             <div>
               <div class="detail-card">
               <div class="card-head">基本信息</div>
                   <div class="card-body">
-                    <p>证券代码：{{zDetail.companyCode}}</p>
-                    <p>证券简称：{{zDetail.companyName}}</p>
-                    <p>所属板块：{{zDetail.companyMarketName}}</p>
-                    <p>所属地区：{{zDetail.companyArea}}</p>
-                    <p>所属行业：{{zDetail.companyIndustry}}</p>
-                    <p>申辩情况：{{zDetail.avermentName}}</p>
+                    <p>证券代码：{{baseInfoData.companyCode}}</p>
+                    <p>证券简称：{{baseInfoData.companyName}}</p>
+                    <p>所属板块：{{baseInfoData.companyMarketName}}</p>
+                    <p>所属地区：{{baseInfoData.companyArea}}</p>
+                    <p>所属行业：{{baseInfoData.companyIndustry}}</p>
+                    <p>申辩情况：{{baseInfoData.avermentName}}</p>
                   </div>
               </div>
             </div>
@@ -97,11 +97,11 @@
               <div class="detail-card">
               <div class="card-head">违规信息</div>
                   <div class="card-body">
-                    <p>监管机构：{{zDetail.supervisionOrganName}}</p>
-                    <p>文号：{{zDetail.lssuedNumber}}</p>
-                    <p>监管类型：{{zDetail.supervisionTypeName}}</p>
-                    <p>违规类型：{{zDetail.violationTypeName}}</p>
-                    <p>处理日期：{{zDetail.processDate}}</p>
+                    <p>监管机构：{{baseInfoData.supervisionOrganName}}</p>
+                    <p>文号：{{baseInfoData.lssuedNumber}}</p>
+                    <p>监管类型：{{baseInfoData.supervisionTypeName}}</p>
+                    <p>违规类型：{{baseInfoData.violationTypeName}}</p>
+                    <p>处理日期：{{baseInfoData.processDate}}</p>
                   </div>
               </div>
             </div>
@@ -109,25 +109,25 @@
               <div class="detail-card">
               <div class="card-head">相关案例</div>
                   <div class="card-body">
-                    <p v-for="val in relationCaseLawList"  :key="val.id" @click="getDetail (val.relationXgal_id)">{{val.title}}</p>
+                    <p v-for="val in relationCaseData"  :key="val.id" @click="getDetail (val.relationXgal_id)">{{val.title}}</p>
                   </div>
               </div>
             </div>
              <div>
-              <div class="detail-card" :v-if="xgfgLawList">
+              <div class="detail-card" :v-if="xgfgLawData">
               <div class="card-head">相关法规</div>
                   <div class="card-body">
-                    <p v-for="val in xgfgLawList"  :key="val.id" @click="getDetail (val.relationXgfg_id)">{{val.title}}</p>
+                    <p v-for="val in xgfgLawData"  :key="val.id" @click="getDetail (val.relationXgfg_id)">{{val.title}}</p>
                   </div>
               </div>
             </div>
           </el-aside>
           <el-container>
             <el-header class="showPdf" height="300" style="padding:0 10px;">
-              <div class="dialog-box dialog-box1" v-loading="zLoadings">
-                <div v-if="zDetail.docUrl=='' || zDetail.docUrl==null " class="pdfTitle" v-html="zDetail.docContent"></div>
-                <iframe :src="pdfUrl" v-if="zDetail.docUrl!='' && zDetail.docUrl!=null" frameborder="0" :height="640"  style="width:100%;margin-top:0px;"></iframe>
-                <!-- <pdf v-if="zDetail.docUrl!='' && zDetail.docUrl!=null"  :src="pdfUrl" v-for="i in numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; height:650px;width: 80%;margin-left:10%;"></pdf> -->
+              <div class="dialog-box dialog-box1" v-loading="detLoading">
+                <div v-if="detail.docUrl=='' || detail.docUrl==null " class="pdfTitle" v-html="detail.docContent"></div>
+                <iframe :src="pdfUrl" v-if="detail.docUrl!='' && detail.docUrl!=null" frameborder="0" :height="640"  style="width:100%;margin-top:0px;"></iframe>
+                <!-- <pdf v-if="detail.docUrl!='' && detail.docUrl!=null"  :src="pdfUrl" v-for="i in numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; height:650px;width: 80%;margin-left:10%;"></pdf> -->
             </div>
             </el-header>
             <el-main class="table2" >
@@ -148,15 +148,17 @@
 import pdf from 'vue-pdf'
 var loadingTask = pdf.createLoadingTask('https://cdn.mozilla.net/pdfjs/tracemonkey.pdf')
 export default {
-  name: 'SupervisionType',
+  name: 'IrregularitiesType',
   data () {
     return {
       leftHeight: document.documentElement.clientHeight - 35,
       leftModelHeight: document.documentElement.clientHeight - 30 + '',
       dataHeight: document.documentElement.clientHeight - 305,
-      zDialog: false,
-      zLoading: true,
-      zLoadings: false,
+      dialog: false,
+      loading: true,
+      detLoading: false,
+      tableData: [],
+      treeData: [],
       msgId: '',
       pdfUrl: loadingTask,
       numPages: undefined,
@@ -182,24 +184,21 @@ export default {
         spliteStockCode: ''
       },
       searchId: '',
-      zDetail: {},
-      relationCaseLawList: [],
-      xgfgLawList: [],
-      tableData: [],
-      condition: {
+      topData: {
+        industry: [],
+        jys: [],
+        StockInfo: [],
         procvince: ['上海', '云南', '内蒙古', '北京', '吉林', '四川', '天津', '宁夏', '安徽', '山东', '山西', '广东', '广西', '新疆',
           '江苏', '江西', '河北', '河南', '浙江', '海南', '湖北', '湖南', '甘肃', '福建', '西藏', '贵州', '辽宁', '重庆', '陕西', '青海', '黑龙江'],
         shenbian: ['申辩', '听证', '全部采纳', '部分采纳', '全未采纳'],
         area: ['沪市主板', '深市主板', '深市中小板', '深市创业板', '新三板', '其他'],
         chufaRole: ['上市公司', '上市公司实际控制人、控股股东', '上市公司5%以上股东', '上市公司其他股东', '上市公司董事', '上市公司监事', '上市公司高级管理人员', '上市公司子公司', '中介机构', '其他']
       },
-      topData: {
-        industry: [],
-        jys: [],
-        StockInfo: []
-      },
-      treeData: [],
-      violationCase: []
+
+      baseInfoData: {}, // 基本信息
+      relationCaseData: [], // 相关案例
+      xgfgLawData: [], // 相关法规
+      violationCaseData: []// 违规案例
     }
   },
   components: {
@@ -221,20 +220,19 @@ export default {
       this.searchList()
     },
     showDetail (id) {
-      this.zDetail = {}
-      this.zDialog = true
+      this.baseInfoData = {}
+      this.dialog = true
       this.searchId = id
       this.getDetail(this.searchId)
     },
     searchList () {
       var that = this
       that.getSearchParam()
-      var searchParams = that.apiPath + 'XA_Wgal/Pager/' + (that.searchParam.titleMust || '[]') + '/' + (that.searchParam.titleCan || '[]') + '/' + (that.searchParam.titleNot || '[]') + '/' + (that.searchParam.processDateStart || '[]') + '/' + (that.searchParam.processDateEnd || '[]') + '/' + (that.searchParam.spliteStockCode || '[]') + '/' + that.searchParam.currentPage + '/30'
-
+      var searchParams = that.apiPath + 'XA_Wgal/Pager/' + (that.searchParam.titleMust || '[]') + '/' + (that.searchParam.titleCan || '[]') + '/' + (that.searchParam.titleNot || '[]') + '/' + (that.searchParam.processDateStart || '[]') + '/' + (that.searchParam.processDateEnd || '[]') + '/' + (that.searchParam.spliteStockCode || '[]') + '/' + (that.searchParam.companyMarketId || '[]') + '/' + (that.searchParam.industryInfo || '[]') + '/' + (that.searchParam.companyArea || '[]') + '/' + that.searchParam.currentPage + '/30'
       that.$ajax.get(searchParams)
         .then(function (response) {
-          that.zLoading = false
-          that.violationCase = response.data.Result.Data
+          that.loading = false
+          that.violationCaseData = response.data.Result.Data
           that.searchParam.total = response.data.Result.Total
         })
     },
@@ -293,35 +291,36 @@ export default {
         })
     },
     getDetail (row) {
+      this.loading = true
       var that = this
       that.$ajax
         .get(that.apiPath + '/XA_Wgal?xa_id=' + row)
         .then(function (response) {
-          that.zLoading = false
+          that.loading = false
           var data = ''
           if (response.data.Result.Data.length > 0) {
             data = response.data.Result.Data[0]
             data['processDate'] = that.dealDate(data['processDate'] - 0)
           } else {
             data = []
-            that.zDetail.docUrl = ''
+            that.baseInfoData.docUrl = ''
           }
-          that.zDetail = data
-          if (that.zDetail.docUrl) { // 展示PDF
-            that.pdfUrl = that.zDetail.docUrl
+          that.baseInfoData = data
+          if (that.baseInfoData.docUrl) { // 展示PDF
+            that.pdfUrl = that.baseInfoData.docUrl
           }
         })
         // 相关案例
       that.$ajax
         .get(that.apiPath + '/XA_Wgal_RelationXgal?xa_id=' + row)
         .then(function (response) {
-          that.relationCaseLawList = response.data.Result.Data
+          that.relationCaseData = response.data.Result.Data
         })
       // 相关法规
       that.$ajax
         .get(that.apiPath + '/XA_Wgal_RelationXgfg?xa_id=' + row)
         .then(function (response) {
-          that.xgfgLawList = response.data.Result.Data
+          that.xgfgLawData = response.data.Result.Data
         })
         // 涉及当事人
       that.$ajax
@@ -331,11 +330,11 @@ export default {
         })
     },
     pdfLoaded () { // pdf加载完后清除loading
-      this.zLoadings = false
+      this.detLoading = false
     },
     beforeClose () { // 弹窗关闭之前清除数据
       this.pdfUrl = ''
-      this.zDialog = false
+      this.dialog = false
     }
 
   },
