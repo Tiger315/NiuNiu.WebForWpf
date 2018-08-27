@@ -126,7 +126,8 @@
             <el-header class="showPdf" height="300">
               <div class="dialog-box dialog-box1" v-loading="zLoadings">
                 <div v-if="zDetail.docUrl=='' || zDetail.docUrl==null " class="pdfTitle" v-html="zDetail.docContent"></div>
-                <pdf v-if="zDetail.docUrl!='' && zDetail.docUrl!=null"  :src="pdfUrl" v-for="i in numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; height:650px;width: 80%;margin-left:10%;"></pdf>
+                <iframe :src="pdfUrl" v-if="zDetail.docUrl!='' && zDetail.docUrl!=null" frameborder="0" :height="640"  style="width:100%;margin-top:0px;"></iframe>
+                <!-- <pdf v-if="zDetail.docUrl!='' && zDetail.docUrl!=null"  :src="pdfUrl" v-for="i in numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; height:650px;width: 80%;margin-left:10%;"></pdf> -->
             </div>
             </el-header>
             <el-main class="table2" >
@@ -308,7 +309,6 @@ export default {
           that.zDetail = data
           if (that.zDetail.docUrl) { // 展示PDF
             that.pdfUrl = that.zDetail.docUrl
-            that.zLoadings = true
           }
         })
         // 相关案例
@@ -483,17 +483,6 @@ span.detail_date {
     border: 1px solid #d4dbe3;
     font-size: 16px;
     margin-bottom: 10px;
-}
-
-.dialog-box1{
-  padding-top:10px;
-  padding-bottom:10px;
-   margin-bottom:20px;
-  overflow-y:scroll ;
-  overflow-x: hidden;
-  max-height:650px;
-  width:100%;
-  background-color: #525659;
 }
 
 .card-head{

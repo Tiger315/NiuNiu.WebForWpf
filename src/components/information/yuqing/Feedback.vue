@@ -54,9 +54,10 @@
 
     <!--dialog开始-->
     <el-dialog :visible.sync="zDialog" fullscreen :before-close="beforeClose">
-      <div class="dialog-box" v-loading="zLoading" style="margin:0 auto;">
+      <div class="dialog-box" v-loading="zLoadings" style="margin:0 auto;">
         <iframe v-if="showWordUrl" :src="showWordUrl" width="80%" :height="dataHeight" frameborder="0" style="margin-left:10%;"></iframe>
-        <pdf v-if="pdfUrl" :src="pdfUrl" v-for="i in numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; width: 40%;margin-left:30%;"></pdf>
+        <iframe  v-if="pdfUrl" :src="pdfUrl" frameborder="0" :height="dataHeight"  style="width:100%;margin-top:10px;"></iframe>
+        <!-- <pdf v-if="pdfUrl" :src="pdfUrl" v-for="i in numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; width: 40%;margin-left:30%;"></pdf> -->
       </div>
     </el-dialog>
     <!--dialog结束-->
@@ -72,6 +73,7 @@ export default {
       dataHeight: document.documentElement.clientHeight - 135,
       zDialog: false,
       zLoading: false,
+      zLoadings: false,
       showWordUrl: '',
       pdfUrl: loadingTask,
       numPages: undefined,
@@ -154,14 +156,13 @@ export default {
     showPDF (urls) { // 展示pdf
       this.pdfUrl = urls
       this.zDialog = true
-      this.zLoading = true
     },
     showWord (urls) { // 展示word
       this.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
       this.zDialog = true
     },
     pdfLoaded () { // pdf加载完后清除loading
-      this.zLoading = false
+      this.zLoadings = false
     },
     beforeClose () { // 弹窗关闭之前清除数据
       this.pdfUrl = ''
@@ -211,6 +212,7 @@ export default {
   width:40% !important;
   margin-left:30%;
   background-color:rgba(0,0,0,0);
+  z-index:99999;
 }
 .noMl.ml20 {
   margin-left: 0px;
@@ -228,7 +230,8 @@ export default {
 }
 .Feedback .el-dialog__headerbtn .el-dialog__close {
   color: #fff !important;
-  font-size: 16px;
+  font-size: 18px;
+
 }
 .el-input__inner {
   height: 32px;
