@@ -27,15 +27,15 @@
             <el-select collapse-tags clearable size="small" placeholder="所属地区" v-model="searchParam.companyArea" filterable>
               <el-option :value="item" :key="item" v-for='item in topData.procvince'></el-option>
             </el-select>
-            <el-select collapse-tags multiple clearable size="small" v-model="searchParam.involveObjectId" placeholder="处罚对象" filterable>
-              <el-option :value="item" :key="item" v-for='item in topData.chufaRole'></el-option>
-            </el-select>
-            <el-select collapse-tags clearable size="small" placeholder="处罚机构" v-model="searchParam.supervisionOrganId" filterable>
-              <el-option :value="item.name" :key="item.id" v-for='item in topData.jys'></el-option>
-            </el-select>
           </el-container>
-          <el-container style="margin-top: 10px;margin-bottom:10px;">
+          <el-container style="margin-top: 10px; margin-bottom: 10px;">
             <div>
+              <el-select collapse-tags multiple clearable size="small" v-model="searchParam.involveObjectId" placeholder="处罚对象" filterable>
+                <el-option :value="item" :key="item" v-for='item in topData.chufaRole'></el-option>
+              </el-select>
+              <el-select collapse-tags clearable size="small" placeholder="处罚机构" v-model="searchParam.supervisionOrganId" filterable>
+                <el-option :value="item.name" :key="item.id" v-for='item in topData.jys'></el-option>
+              </el-select>
               <el-button type="primary" icon="el-icon-search" size="small" @click="searchList">搜索</el-button>
               <el-button type="warning" size="small" @click="clearParam">清空搜索</el-button>
             </div>
@@ -43,7 +43,7 @@
         </el-header>
         <!-- 搜索条件结束 -->
         <!--表格开始-->
-        <el-main :height="dataHeight">
+        <el-main :height="tableHeight">
           <el-table v-loading="loading" element-loading-text="拼命加载中" :data="detailData.violationCaseData" stripe style="width: 100%;" row-key="id">
             <el-table-column type="index" fixed="left" width="70" label="序号" :index="typeIndex"></el-table-column>
             <el-table-column fixed="left" prop="title" label="标题" min-width="280" fit show-overflow-tooltip>
@@ -149,7 +149,7 @@ export default {
     return {
       leftHeight: document.documentElement.clientHeight - 35,
       leftModelHeight: document.documentElement.clientHeight - 30 + '',
-      dataHeight: document.documentElement.clientHeight - 305,
+      tableHeight: document.documentElement.clientHeight - 305,
       dialog: false,
       loading: true,
       detLoading: false,
@@ -344,7 +344,7 @@ export default {
     const that = this
     window.onresize = () => {
       return (() => {
-        that.dataHeight = document.documentElement.clientHeight - 305
+        that.tableHeight = document.documentElement.clientHeight - 305
         that.leftHeight = document.documentElement.clientHeight - 35
       })()
     }
