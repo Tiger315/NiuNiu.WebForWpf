@@ -57,8 +57,8 @@
                 {{scope.row.companyName}}{{scope.row.companyCode?"("+scope.row.companyCode+")":""}}
               </template>
             </el-table-column>
-            <el-table-column prop="violationTypeName" width="150" label="违规类型" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="supervisionOrganName" width="200" label="监管机构"></el-table-column>
+            <el-table-column prop="violationTypeName" width="200" label="违规类型" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="supervisionOrganName" width="150" label="监管机构"></el-table-column>
             <el-table-column :formatter="processDate" width="150" label="更新时间"></el-table-column>
           </el-table>
         </el-main>
