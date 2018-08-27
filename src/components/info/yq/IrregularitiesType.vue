@@ -28,23 +28,24 @@
               <el-option :value="item" :key="item" v-for='item in topData.procvince'></el-option>
             </el-select>
           </el-container>
-          <el-container style="margin-top: 10px; margin-bottom: 10px;">
-            <div>
-              <el-select collapse-tags multiple clearable size="small" v-model="searchParam.involveObjectId" placeholder="处罚对象" filterable>
+          <el-container style="margin-top: 10px; margin-bottom: 10px;justify-content:left;">
+            <el-select collapse-tags multiple clearable size="small" v-model="searchParam.involveObjectId" placeholder="处罚对象" filterable>
                 <el-option :value="item" :key="item" v-for='item in topData.chufaRole'></el-option>
               </el-select>
               <el-select collapse-tags clearable size="small" placeholder="处罚机构" v-model="searchParam.supervisionOrganId" filterable>
                 <el-option :value="item.name" :key="item.id" v-for='item in topData.jys'></el-option>
               </el-select>
+            <div>
               <el-button type="primary" icon="el-icon-search" size="small" @click="searchList">搜索</el-button>
               <el-button type="warning" size="small" @click="clearParam">清空搜索</el-button>
             </div>
+            <div></div>
           </el-container>
         </el-header>
         <!-- 搜索条件结束 -->
         <!--表格开始-->
-        <el-main :height="tableHeight">
-          <el-table v-loading="loading" element-loading-text="拼命加载中" :data="detailData.violationCaseData" stripe style="width: 100%;" row-key="id">
+        <el-main >
+          <el-table v-loading="loading" element-loading-text="拼命加载中" :height="tableHeight" :data="detailData.violationCaseData" stripe style="width: 100%;" row-key="id">
             <el-table-column type="index" fixed="left" width="70" label="序号" :index="typeIndex"></el-table-column>
             <el-table-column fixed="left" prop="title" label="标题" min-width="280" fit show-overflow-tooltip>
               <template slot-scope="scope">
@@ -56,8 +57,8 @@
                 {{scope.row.companyName}}{{scope.row.companyCode?"("+scope.row.companyCode+")":""}}
               </template>
             </el-table-column>
-            <el-table-column prop="violationTypeName" label="违规类型" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="supervisionOrganName" label="监管机构"></el-table-column>
+            <el-table-column prop="violationTypeName" width="150" label="违规类型" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="supervisionOrganName" width="200" label="监管机构"></el-table-column>
             <el-table-column :formatter="processDate" width="150" label="更新时间"></el-table-column>
           </el-table>
         </el-main>
@@ -149,7 +150,7 @@ export default {
     return {
       leftHeight: document.documentElement.clientHeight - 35,
       leftModelHeight: document.documentElement.clientHeight - 30 + '',
-      tableHeight: document.documentElement.clientHeight - 305,
+      tableHeight: document.documentElement.clientHeight - 190,
       dialog: false,
       loading: true,
       detLoading: false,
@@ -223,6 +224,7 @@ export default {
       this.getDetail(this.searchId)
     },
     searchList () {
+      this.loading = true
       var that = this
       that.getSearchParam()
       var searchParams = that.apiPath + 'XA_Wgal/Pager/' + (that.searchParam.titleMust || '[]') + '/' + (that.searchParam.titleCan || '[]') + '/' + (that.searchParam.titleNot || '[]') + '/' + (that.searchParam.processDateStart || '[]') + '/' + (that.searchParam.processDateEnd || '[]') + '/' + (that.searchParam.spliteStockCode || '[]') + '/' + (that.searchParam.companyMarketId || '[]') + '/' + (that.searchParam.industryInfo || '[]') + '/' + (that.searchParam.companyArea || '[]') + '/' + that.searchParam.currentPage + '/30'
@@ -344,7 +346,7 @@ export default {
     const that = this
     window.onresize = () => {
       return (() => {
-        that.tableHeight = document.documentElement.clientHeight - 305
+        that.tableHeight = document.documentElement.clientHeight - 190
         that.leftHeight = document.documentElement.clientHeight - 35
       })()
     }
