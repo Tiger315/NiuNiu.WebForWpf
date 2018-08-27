@@ -45,7 +45,7 @@
         <!-- 搜索条件结束 -->
         <!--表格开始-->
         <el-main >
-          <el-table v-loading="loading" element-loading-text="拼命加载中" :height="tableHeight" :data="detailData.violationCaseData" stripe style="width: 100%;" row-key="id">
+          <el-table v-loading="loadingData.loading" element-loading-text="拼命加载中" :height="tableHeight" :data="detailData.violationCaseData" stripe style="width: 100%;" row-key="id">
             <el-table-column type="index" fixed="left" width="70" label="序号" :index="typeIndex"></el-table-column>
             <el-table-column fixed="left" prop="title" label="标题" min-width="280" fit show-overflow-tooltip>
               <template slot-scope="scope">
@@ -75,13 +75,13 @@
       </el-container>
     </el-container>
     <el-dialog :visible.sync="dialog" style="font-weight: bold;margin:0px;" fullscreen :before-close="beforeClose">
-      <div class="dialog-box" v-loading="loading">
+      <div class="dialog-box">
         <el-container :height="leftModelHeight">
           <el-aside width="33.3%">
             <div>
               <div class="detail-card">
                 <div class="card-head">基本信息</div>
-                <div class="card-body">
+                <div class="card-body" v-loading="loadingData.baseInfoLoading">
                   <p>证券代码：{{detailData.baseInfoData.companyCode}}</p>
                   <p>证券简称：{{detailData.baseInfoData.companyName}}</p>
                   <p>所属板块：{{detailData.baseInfoData.companyMarketName}}</p>
@@ -94,7 +94,7 @@
             <div>
               <div class="detail-card">
                 <div class="card-head">违规信息</div>
-                <div class="card-body">
+                <div class="card-body" v-loading="loadingData.baseInfoLoading">
                   <p>监管机构：{{detailData.baseInfoData.supervisionOrganName}}</p>
                   <p>文号：{{detailData.baseInfoData.lssuedNumber}}</p>
                   <p>监管类型：{{detailData.baseInfoData.supervisionTypeName}}</p>
@@ -106,7 +106,7 @@
             <div>
               <div class="detail-card">
                 <div class="card-head">相关案例</div>
-                <div class="card-body">
+                <div class="card-body" v-loading="loadingData.relaCaseLoading">
                   <p v-for="val in detailData.relationCaseData" :key="val.id" @click="getDetail (val.relationXgal_id)">{{val.title}}</p>
                 </div>
               </div>
@@ -114,7 +114,7 @@
             <div>
               <div class="detail-card" :v-if="detailData.xgfgLawData">
                 <div class="card-head">相关法规</div>
-                <div class="card-body">
+                <div class="card-body" v-loading="loadingData.xgfgLawLoading">
                   <p v-for="val in detailData.xgfgLawData" :key="val.id" @click="getDetail (val.relationXgfg_id)">{{val.title}}</p>
                 </div>
               </div>
@@ -122,13 +122,13 @@
           </el-aside>
           <el-container>
             <el-header class="showPdf" height="300" style="padding:0 10px;">
-              <div class="dialog-box dialog-box1" v-loading="detLoading">
+              <div class="dialog-box dialog-box1" v-loading="loadingData.detLoading">
                 <div v-if="detailData.baseInfoData.docUrl=='' || detailData.baseInfoData.docUrl==null " class="pdfTitle" v-html="detailData.baseInfoData.docContent"></div>
                 <iframe :src="pdfUrl" v-if="detailData.baseInfoData.docUrl!='' && detailData.baseInfoData.docUrl!=null" frameborder="0" :height="640" style="width:100%;margin-top:0px;"></iframe>
               </div>
             </el-header>
             <el-main class="table2">
-              <el-table align="center" header-align="center" :data="tableData" border style="width: 100%">
+              <el-table align="center" header-align="center" :data="loadingData.tableData" border style="width: 100%"  v-loading="loadingData.violatioLoading">
                 <el-table-column fixed prop="involveObjectName" label="涉及当事人" width="350"> </el-table-column>
                 <el-table-column fixed prop="objectPositionName" label="涉及对象"></el-table-column>
                 <el-table-column fixed prop="supervisionTypeName" label="监管类型"></el-table-column>
@@ -152,8 +152,6 @@ export default {
       leftModelHeight: document.documentElement.clientHeight - 30 + '',
       tableHeight: document.documentElement.clientHeight - 190,
       dialog: false,
-      loading: true,
-      detLoading: false,
       tableData: [],
       treeData: [],
       msgId: '',
@@ -195,7 +193,16 @@ export default {
         baseInfoData: {}, // 基本信息
         relationCaseData: [], // 相关案例
         xgfgLawData: [], // 相关法规
-        violationCaseData: []// 违规案例
+        violationCaseData: [], // 违规案例
+        tableData: []
+      },
+      loadingData: {
+        loading: true,
+        detLoading: false,
+        baseInfoLoading: false, // 基本信息loading
+        relaCaseLoading: false, // 相关案例loading
+        xgfgLawLoading: false, // 相关法规loading
+        violatioLoading: false// 违规案例loading
       }
     }
   },
@@ -218,19 +225,18 @@ export default {
       this.searchList()
     },
     showDetail (id) {
-      this.detailData.baseInfoData = {}
       this.dialog = true
       this.searchId = id
       this.getDetail(this.searchId)
     },
     searchList () {
-      this.loading = true
+      this.loadingData.loading = true
       var that = this
       that.getSearchParam()
       var searchParams = that.apiPath + 'XA_Wgal/Pager/' + (that.searchParam.titleMust || '[]') + '/' + (that.searchParam.titleCan || '[]') + '/' + (that.searchParam.titleNot || '[]') + '/' + (that.searchParam.processDateStart || '[]') + '/' + (that.searchParam.processDateEnd || '[]') + '/' + (that.searchParam.spliteStockCode || '[]') + '/' + (that.searchParam.companyMarketId || '[]') + '/' + (that.searchParam.industryInfo || '[]') + '/' + (that.searchParam.companyArea || '[]') + '/' + that.searchParam.currentPage + '/30'
       that.$ajax.get(searchParams)
         .then(function (response) {
-          that.loading = false
+          that.loadingData.loading = false
           that.detailData.violationCaseData = response.data.Result.Data
           that.searchParam.total = response.data.Result.Total
         })
@@ -290,12 +296,16 @@ export default {
         })
     },
     getDetail (row) {
-      this.loading = true
       var that = this
+      for (var key in that.loadingData) {
+        that.loadingData[key] = true
+      }
       that.$ajax
         .get(that.apiPath + '/XA_Wgal?xa_id=' + row)
         .then(function (response) {
-          that.loading = false
+          that.loadingData.baseInfoLoading = false
+          that.loadingData.loading = false
+          that.loadingData.detLoading = false
           var data = ''
           if (response.data.Result.Data.length > 0) {
             data = response.data.Result.Data[0]
@@ -314,26 +324,33 @@ export default {
         .get(that.apiPath + '/XA_Wgal_RelationXgal?xa_id=' + row)
         .then(function (response) {
           that.detailData.relationCaseData = response.data.Result.Data
+          that.loadingData.relaCaseLoading = false
         })
       // 相关法规
       that.$ajax
         .get(that.apiPath + '/XA_Wgal_RelationXgfg?xa_id=' + row)
         .then(function (response) {
           that.detailData.xgfgLawData = response.data.Result.Data
+          that.loadingData.xgfgLawLoading = false
         })
       // 涉及当事人
       that.$ajax
         .get(that.apiPath + '/XA_Wgal_RelationProcess?xa_id=' + row)
         .then(function (response) {
           that.tableData = response.data.Result.Data
+          that.loadingData.violatioLoading = false
         })
     },
     pdfLoaded () { // pdf加载完后清除loading
-      this.detLoading = false
+      this.loadingData.detLoading = false
     },
     beforeClose () { // 弹窗关闭之前清除数据
       this.pdfUrl = ''
       this.dialog = false
+      this.detailData.baseInfoData = {}// 清除基本信息
+      this.detailData.relationCaseData = []// 清除相关案例
+      this.detailData.xgfgLawData = []// 清除相关法规
+      this.detailData.tableData = []
     }
   },
   created () {

@@ -32,7 +32,7 @@
           <span style="color: #0d308c; cursor: pointer; font" @click="showWord(scope.row.Letter_Content)">{{ scope.row.Letter_ContentName }}</span>
         </template>
       </el-table-column>
-      <el-table-column fixed="left" prop="Company_ReplyName" label="公司回复" min-width="200" fit show-overflow-tooltip>
+      <el-table-column  prop="Company_ReplyName" label="公司回复" min-width="200" fit show-overflow-tooltip>
         <template slot-scope="scope">
           <span style="color: #0d308c; cursor: pointer; font" @click="showPDF(scope.row.Company_Reply)">{{ scope.row.Company_ReplyName }}</span>
         </template>
