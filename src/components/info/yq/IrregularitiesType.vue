@@ -335,7 +335,6 @@ export default {
       this.pdfUrl = ''
       this.dialog = false
     }
-
   },
   created () {
     this.loadTopMenu()
