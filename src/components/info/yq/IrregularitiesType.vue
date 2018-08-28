@@ -3,10 +3,9 @@
     <el-container :height="leftHeight">
       <el-aside width="20%" :height="leftHeight" class="left">
         <div class="title">违规类型</div>
-        <div style="width:100%;display: -ms-flexbox;display: flex;-ms-flex-direction: row;flex-direction: row;-ms-flex: 1;flex: 1;-ms-flex-preferred-size: auto;flex-basis: auto;box-sizing: border-box;min-width: 0;">
-          <el-tree :data="treeData" style="width:100%;"></el-tree>
+        <div  style="width:100%;display: -ms-flexbox;display: flex;-ms-flex-direction: row;flex-direction: row;-ms-flex: 1;flex: 1;-ms-flex-preferred-size: auto;flex-basis: auto;box-sizing: border-box;min-width: 0;">
+          <el-tree v-loading="loadingData.leftDataLoading" :data="treeData" style="width:100%;"></el-tree>
         </div>
-
       </el-aside>
       <el-container>
         <!-- 搜索条件开始 -->
@@ -202,6 +201,7 @@ export default {
       loadingData: {
         loading: true,
         detLoading: false,
+        leftDataLoading: false,
         baseInfoLoading: false, // 基本信息loading
         relaCaseLoading: false, // 相关案例loading
         xgfgLawLoading: false, // 相关法规loading
@@ -253,7 +253,7 @@ export default {
     },
     getSearchParam () {
       // 获取查询的参数
-      // 处理开始结束时间
+      // 处   理开始结束时间
       this.searchParam.processDateStart = this.searchParam.time && this.dealDate(this.searchParam.time[0]) // 开始时间
       this.searchParam.processDateEnd = this.searchParam.time && this.dealDate(this.searchParam.time[1]) // 结束时间
       // 处理公司代码
@@ -265,6 +265,7 @@ export default {
     },
     loadLeftMenu () { // 侧边栏
       var that = this
+      that.loadingData.leftDataLoading = true
       that.$ajax.get(that.apiPath + 'ViolationType')
         .then(function (response) {
           var datas = response.data
@@ -273,6 +274,7 @@ export default {
             var str = JSON.stringify(treeData).replace(/Name/g, 'label')
             str = str.replace(/Child/g, 'children')
             that.treeData = JSON.parse(str)
+            that.loadingData.leftDataLoading = false
           }
         })
         .catch(function (response) {
@@ -301,7 +303,9 @@ export default {
     getDetail (row) {
       var that = this
       for (var key in that.loadingData) {
-        that.loadingData[key] = true
+        if (key !== 'leftDataLoading') {
+          that.loadingData[key] = true
+        }
       }
       that.$ajax
         .get(that.apiPath + '/XA_Wgal?xa_id=' + row)

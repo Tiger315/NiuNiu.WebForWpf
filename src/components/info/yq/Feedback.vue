@@ -25,7 +25,7 @@
     <!-- 搜索条件结束 -->
 
     <!-- 表格数据开始 -->
-    <el-table v-loadingData.loading="loadingData.loading" element-loadingData.loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
+    <el-table v-loading.loading="loadingData.loading" element-loading.loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
       <el-table-column type="index" fixed="left" label="序号" width="70" :index="typeIndex">序号</el-table-column>
        <el-table-column fixed="left" prop="Letter_ContentName" label="函件内容" min-width="200" fit show-overflow-tooltip>
         <template slot-scope="scope">
@@ -54,7 +54,7 @@
 
     <!--dialog开始-->
     <el-dialog :visible.sync="dialog" fullscreen :before-close="beforeClose">
-      <div class="dialog-box" v-loadingData.loading="loadingData.diaLoading" style="margin:0 auto;">
+      <div class="dialog-box" v-loading.loading="loadingData.diaLoading" style="margin:0 auto;">
         <iframe v-if="urlData.showWordUrl" :src="urlData.showWordUrl" width="80%" :height="dataHeight" frameborder="0" style="margin-left:10%;"></iframe>
         <iframe  v-if="urlData.pdfUrl" :src="urlData.pdfUrl" frameborder="0" :height="dataHeight"  style="width:100%;margin-top:10px;"></iframe>
         <!-- <pdf v-if=.urlData.pdfUrl" :src=.urlData.pdfUrl" v-for="i in.urlData.numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; width: 40%;margin-left:30%;"></pdf> -->
@@ -65,7 +65,7 @@
 </template>
 <script>
 import pdf from 'vue-pdf'
-var loadingTask = pdf.createLoadingTask('https://cdn.mozilla.net/pdfjs/tracemonkey.pdf')
+// var loadingTask = pdf.createLoadingTask('https://cdn.mozilla.net/pdfjs/tracemonkey.pdf')
 export default {
   name: 'Feedback',
   data () {
@@ -78,7 +78,7 @@ export default {
       dialog: false,
       urlData: {
         showWordUrl: '',
-        pdfUrl: loadingTask,
+        pdfUrl: '',
         numPages: undefined
       },
       searchParam: {
