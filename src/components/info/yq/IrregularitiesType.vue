@@ -32,11 +32,11 @@
           </el-container>
           <el-container style="margin-top: 10px; margin-bottom: 10px;justify-content:left;">
             <el-select collapse-tags multiple clearable size="small" v-model="searchParam.involveObjectId" placeholder="处罚对象" filterable>
-                <el-option :value="item" :key="item" v-for='item in topData.chufaRole'></el-option>
-              </el-select>
-              <el-select collapse-tags clearable size="small" placeholder="处罚机构" v-model="searchParam.supervisionOrganId" filterable>
-                <el-option :value="item.name" :key="item.id" v-for='item in topData.jys'></el-option>
-              </el-select>
+              <el-option :value="item" :key="item" v-for='item in topData.chufaRole'></el-option>
+            </el-select>
+            <el-select collapse-tags clearable size="small" placeholder="处罚机构" v-model="searchParam.supervisionOrganId" filterable>
+              <el-option :value="item.name" :key="item.id" v-for='item in topData.jys'></el-option>
+            </el-select>
             <div>
               <el-button type="primary" icon="el-icon-search" size="small" @click="searchList">搜索</el-button>
               <el-button type="warning" size="small" @click="clearParam">清空搜索</el-button>
@@ -45,8 +45,9 @@
           </el-container>
         </el-header>
         <!-- 搜索条件结束 -->
+
         <!--表格开始-->
-        <el-main >
+        <el-main>
           <el-table v-loading="loadingData.loading" element-loading-text="拼命加载中" :height="tableHeight" :data="detailData.violationCaseData" stripe style="width: 100%;" row-key="id">
             <el-table-column type="index" fixed="left" width="70" label="序号" :index="typeIndex"></el-table-column>
             <el-table-column fixed="left" prop="title" label="标题" min-width="280" fit show-overflow-tooltip>
@@ -65,6 +66,7 @@
           </el-table>
         </el-main>
         <!--表格结束-->
+
         <!--分页开始-->
         <el-footer height="45">
           <div style="text-align: center;width:100%; margin-top: 10px; ">
@@ -130,7 +132,7 @@
               </div>
             </el-header>
             <el-main class="table2">
-              <el-table align="center" header-align="center" :data="loadingData.tableData" border style="width: 100%"  v-loading="loadingData.violatioLoading">
+              <el-table align="center" header-align="center" :data="loadingData.tableData" border style="width: 100%" v-loading="loadingData.violatioLoading">
                 <el-table-column fixed prop="involveObjectName" label="涉及当事人" width="350"> </el-table-column>
                 <el-table-column fixed prop="objectPositionName" label="涉及对象"></el-table-column>
                 <el-table-column fixed prop="supervisionTypeName" label="监管类型"></el-table-column>
