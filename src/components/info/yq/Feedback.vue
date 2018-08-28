@@ -27,17 +27,17 @@
     <!-- 表格数据开始 -->
     <el-table v-loading.loading="loadingData.loading" element-loading.loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
       <el-table-column type="index" fixed="left" label="序号" width="70" :index="typeIndex">序号</el-table-column>
-       <el-table-column fixed="left" prop="Letter_ContentName" label="函件内容" min-width="200" fit show-overflow-tooltip>
+      <el-table-column fixed="left" prop="Letter_ContentName" label="函件内容" min-width="200" fit show-overflow-tooltip>
         <template slot-scope="scope">
           <span style="color: #0d308c; cursor: pointer; font" @click="showWord(scope.row.Letter_Content)">{{ scope.row.Letter_ContentName }}</span>
         </template>
       </el-table-column>
-      <el-table-column  prop="Company_ReplyName" label="公司回复" min-width="200" fit show-overflow-tooltip>
+      <el-table-column prop="Company_ReplyName" label="公司回复" min-width="200" fit show-overflow-tooltip>
         <template slot-scope="scope">
           <span style="color: #0d308c; cursor: pointer; font" @click="showPDF(scope.row.Company_Reply)">{{ scope.row.Company_ReplyName }}</span>
         </template>
       </el-table-column>
-      <el-table-column  prop="Company_Code" label="证券代码" width="150"></el-table-column>
+      <el-table-column prop="Company_Code" label="证券代码" width="150"></el-table-column>
       <el-table-column prop="Company_Name" label="证券简称" width="150"></el-table-column>
       <el-table-column prop="Letter_TypeValue" label="问询类型" width="150"></el-table-column>
       <el-table-column prop="SendDate" width="150" label="发函日期"></el-table-column>
@@ -56,8 +56,7 @@
     <el-dialog :visible.sync="dialog" fullscreen :before-close="beforeClose">
       <div class="dialog-box" v-loading.loading="loadingData.diaLoading" style="margin:0 auto;">
         <iframe v-if="urlData.showWordUrl" :src="urlData.showWordUrl" width="80%" :height="dataHeight" frameborder="0" style="margin-left:10%;"></iframe>
-        <iframe  v-if="urlData.pdfUrl" :src="urlData.pdfUrl" frameborder="0" :height="dataHeight"  style="width:100%;margin-top:10px;"></iframe>
-        <!-- <pdf v-if=.urlData.pdfUrl" :src=.urlData.pdfUrl" v-for="i in.urlData.numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; width: 40%;margin-left:30%;"></pdf> -->
+        <iframe v-if="urlData.pdfUrl" :src="urlData.pdfUrl" frameborder="0" :height="dataHeight" style="width:100%;margin-top:10px;"></iframe>
       </div>
     </el-dialog>
     <!--dialog结束-->
@@ -106,7 +105,6 @@ export default {
         count: 11,
         currentPage: 1
       }
-
     }
   },
   components: {
@@ -208,11 +206,11 @@ export default {
 }
 </script>
 <style>
-.dialog-box .el-loadingData.loading-mask{
-  width:40% !important;
-  margin-left:30%;
-  background-color:rgba(0,0,0,0);
-  z-index:99999;
+.dialog-box .el-loadingData.loading-mask {
+  width: 40% !important;
+  margin-left: 30%;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 99999;
 }
 .noMl.ml20 {
   margin-left: 0px;
@@ -231,7 +229,6 @@ export default {
 .Feedback .el-dialog__headerbtn .el-dialog__close {
   color: #fff !important;
   font-size: 18px;
-
 }
 .el-input__inner {
   height: 32px;
