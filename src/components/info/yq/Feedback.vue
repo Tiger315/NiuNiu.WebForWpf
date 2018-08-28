@@ -102,7 +102,6 @@ export default {
         count: 11,
         currentPage: 1
       }
-
     }
   },
   components: {
