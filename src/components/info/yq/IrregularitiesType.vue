@@ -3,8 +3,8 @@
     <el-container :height="leftHeight">
       <el-aside width="20%" :height="leftHeight" class="left">
         <div class="title">违规类型</div>
-        <div  style="width:100%;display: -ms-flexbox;display: flex;-ms-flex-direction: row;flex-direction: row;-ms-flex: 1;flex: 1;-ms-flex-preferred-size: auto;flex-basis: auto;box-sizing: border-box;min-width: 0;">
-          <el-tree v-loading="loadingData.leftDataLoading" :data="treeData" style="width:100%;"></el-tree>
+        <div  style="display: -ms-flexbox;display: flex;-ms-flex-direction: row;flex-direction: row;-ms-flex: 1;flex: 1;-ms-flex-preferred-size: auto;flex-basis: auto;box-sizing: border-box;min-width: 0;">
+          <el-tree v-loading="loadingData.leftDataLoading" :data="treeData"></el-tree>
         </div>
       </el-aside>
       <el-container>
@@ -384,6 +384,9 @@ export default {
 }
 </script>
 <style>
+.el-tree__empty-block{
+width:180px;
+}
 .annotationLayer {
   transform: scale(1) !important;
 }
