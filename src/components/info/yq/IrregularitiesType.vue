@@ -6,7 +6,6 @@
         <div style="width:100%;display: -ms-flexbox;display: flex;-ms-flex-direction: row;flex-direction: row;-ms-flex: 1;flex: 1;-ms-flex-preferred-size: auto;flex-basis: auto;box-sizing: border-box;min-width: 0;">
           <el-tree :data="treeData" style="width:100%;"></el-tree>
         </div>
-
       </el-aside>
       <el-container>
         <!-- 搜索条件开始 -->
