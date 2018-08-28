@@ -25,7 +25,7 @@
     <!-- 搜索条件结束 -->
 
     <!-- 表格数据开始 -->
-    <el-table v-loading="zLoading" element-loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
+    <el-table v-loading="loading" element-loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
       <el-table-column type="index" fixed="left" label="序号" width="70" :index="typeIndex">序号</el-table-column>
        <el-table-column fixed="left" prop="Letter_ContentName" label="函件内容" min-width="200" fit show-overflow-tooltip>
         <template slot-scope="scope">
@@ -53,8 +53,8 @@
     <!--分页结束-->
 
     <!--dialog开始-->
-    <el-dialog :visible.sync="zDialog" fullscreen :before-close="beforeClose">
-      <div class="dialog-box" v-loading="zLoadings" style="margin:0 auto;">
+    <el-dialog :visible.sync="dialog" fullscreen :before-close="beforeClose">
+      <div class="dialog-box" v-loading="diaLoading" style="margin:0 auto;">
         <iframe v-if="showWordUrl" :src="showWordUrl" width="80%" :height="dataHeight" frameborder="0" style="margin-left:10%;"></iframe>
         <iframe  v-if="pdfUrl" :src="pdfUrl" frameborder="0" :height="dataHeight"  style="width:100%;margin-top:10px;"></iframe>
         <!-- <pdf v-if="pdfUrl" :src="pdfUrl" v-for="i in numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; width: 40%;margin-left:30%;"></pdf> -->
@@ -71,9 +71,9 @@ export default {
   data () {
     return {
       dataHeight: document.documentElement.clientHeight - 135,
-      zDialog: false,
-      zLoading: false,
-      zLoadings: false,
+      dialog: false,
+      loading: false,
+      diaLoading: false,
       showWordUrl: '',
       pdfUrl: loadingTask,
       numPages: undefined,
@@ -110,8 +110,8 @@ export default {
   },
   methods: {
     closeModel () {
-      this.zLoading = false
-      this.zDialog = false
+      this.loading = false
+      this.dialog = false
     },
     typeIndex (index) {
       return index + (this.zPager.currentPage - 1) * this.zPager.size + 1
@@ -124,7 +124,7 @@ export default {
       this.getList()
     },
     getList (flag) {
-      this.zLoading = true
+      this.loading = true
       var that = this
       var apiPath = ''
       if (flag) {
@@ -135,7 +135,7 @@ export default {
       }
       that.$ajax.get(apiPath)
         .then(function (response) {
-          that.zLoading = false
+          that.loading = false
           var data = response.data.Result
           that.tableData = data.Data
           that.zPager.total = data.Total
@@ -155,19 +155,19 @@ export default {
     },
     showPDF (urls) { // 展示pdf
       this.pdfUrl = urls
-      this.zDialog = true
+      this.dialog = true
     },
     showWord (urls) { // 展示word
       this.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
-      this.zDialog = true
+      this.dialog = true
     },
     pdfLoaded () { // pdf加载完后清除loading
-      this.zLoadings = false
+      this.diaLoading = false
     },
     beforeClose () { // 弹窗关闭之前清除数据
       this.pdfUrl = ''
       this.showWordUrl = ''
-      this.zDialog = false
+      this.dialog = false
     },
     getTopData () {
       var that = this

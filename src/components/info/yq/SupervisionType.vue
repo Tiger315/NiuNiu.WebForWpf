@@ -18,7 +18,7 @@
       </el-container>
       <!-- 搜索条件结束 -->
       <!--表格开始-->
-     <el-table v-loading="zLoading" :height="dataHeight"  element-loading-text="拼命加载中" :data="violationCase"  stripe style="width: 100%;" empty-text=" " row-key="id">
+     <el-table v-loading="loading" :height="dataHeight"  element-loading-text="拼命加载中" :data="violationCase"  stripe style="width: 100%;" empty-text=" " row-key="id">
               <el-table-column type="index" label="序号" fixed="left" width="70" :index="typeIndex"></el-table-column>
               <el-table-column fixed="left" prop="News_Title" label="标题"  min-width="250"  fit show-overflow-tooltip>
                 <template slot-scope="scope">
@@ -44,8 +44,8 @@ export default {
   data () {
     return {
       dataHeight: document.documentElement.clientHeight - 135,
-      zDialog: true,
-      zLoading: true,
+      dialog: true,
+      loading: true,
       searchParam: {
         titleMust: '', // 必含关键词
         titleCan: '', // 可含关键词
@@ -98,12 +98,12 @@ export default {
       that.$ajax
         .get(api)
         .then(function (response) {
-          that.zLoading = false
+          that.loading = false
           that.violationCase = response.data.Result.Data
           that.zPager.total = response.data.Result.Total
         })
         .catch(function () {
-          that.zLoading = false
+          that.loading = false
         })
     },
     getSearchParam () {
