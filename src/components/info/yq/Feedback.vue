@@ -54,18 +54,17 @@
 
     <!--dialog开始-->
     <el-dialog :visible.sync="dialog" fullscreen :before-close="beforeClose">
-<<<<<<< HEAD
-      <div class="dialog-box" v-loading="diaLoading" style="margin:0 auto;">
+      <<<<<<< HEAD <div class="dialog-box" v-loading="diaLoading" style="margin:0 auto;">
         <iframe v-if="showWordUrl" :src="showWordUrl" width="80%" :height="dataHeight" frameborder="0" style="margin-left:10%;"></iframe>
         <iframe v-if="pdfUrl" :src="pdfUrl" frameborder="0" :height="dataHeight" style="width:100%;margin-top:10px;"></iframe>
         <!-- <pdf v-if="pdfUrl" :src="pdfUrl" v-for="i in numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; width: 40%;margin-left:30%;"></pdf> -->
-=======
-      <div class="dialog-box" v-loadingData.loading="loadingData.diaLoading" style="margin:0 auto;">
-        <iframe v-if="urlData.showWordUrl" :src="urlData.showWordUrl" width="80%" :height="dataHeight" frameborder="0" style="margin-left:10%;"></iframe>
-        <iframe  v-if="urlData.pdfUrl" :src="urlData.pdfUrl" frameborder="0" :height="dataHeight"  style="width:100%;margin-top:10px;"></iframe>
-        <!-- <pdf v-if=.urlData.pdfUrl" :src=.urlData.pdfUrl" v-for="i in.urlData.numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; width: 40%;margin-left:30%;"></pdf> -->
->>>>>>> 85b81d85e9c91dbb79ec34a80544900f5e911493
-      </div>
+        =======
+        <div class="dialog-box" v-loadingData.loading="loadingData.diaLoading" style="margin:0 auto;">
+          <iframe v-if="urlData.showWordUrl" :src="urlData.showWordUrl" width="80%" :height="dataHeight" frameborder="0" style="margin-left:10%;"></iframe>
+          <iframe v-if="urlData.pdfUrl" :src="urlData.pdfUrl" frameborder="0" :height="dataHeight" style="width:100%;margin-top:10px;"></iframe>
+          <!-- <pdf v-if=.urlData.pdfUrl" :src=.urlData.pdfUrl" v-for="i in.urlData.numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; width: 40%;margin-left:30%;"></pdf> -->
+          >>>>>>> 85b81d85e9c91dbb79ec34a80544900f5e911493
+        </div>
     </el-dialog>
     <!--dialog结束-->
   </div>
@@ -214,19 +213,11 @@ export default {
 }
 </script>
 <style>
-<<<<<<< HEAD
-.dialog-box .el-loading-mask {
+.dialog-box .el-loadingData.loading-mask {
   width: 40% !important;
   margin-left: 30%;
   background-color: rgba(0, 0, 0, 0);
   z-index: 99999;
-=======
-.dialog-box .el-loadingData.loading-mask{
-  width:40% !important;
-  margin-left:30%;
-  background-color:rgba(0,0,0,0);
-  z-index:99999;
->>>>>>> 85b81d85e9c91dbb79ec34a80544900f5e911493
 }
 .noMl.ml20 {
   margin-left: 0px;
