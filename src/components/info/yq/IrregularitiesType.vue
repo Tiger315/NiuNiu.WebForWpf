@@ -357,7 +357,7 @@ export default {
   },
   created () {
     this.loadTopMenu()
-    // this.loadLeftMenu()
+    this.loadLeftMenu()
     this.searchList()
   },
   mounted () {

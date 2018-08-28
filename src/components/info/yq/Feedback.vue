@@ -18,14 +18,14 @@
       </el-select>
       <el-date-picker type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" class="ml20"></el-date-picker>
       <div class="ml20">
-        <el-button type="primary" icon="el-icon-search" size="small" @click="getList(1)">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" size="small" @click="getList">搜索</el-button>
         <el-button type="warning" size="small" @click="clearParam">清空搜索</el-button>
       </div>
     </el-container>
     <!-- 搜索条件结束 -->
 
     <!-- 表格数据开始 -->
-    <el-table v-loading="loading" element-loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
+    <el-table v-loadingData.loading="loadingData.loading" element-loadingData.loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
       <el-table-column type="index" fixed="left" label="序号" width="70" :index="typeIndex">序号</el-table-column>
       <el-table-column fixed="left" prop="Letter_ContentName" label="函件内容" min-width="200" fit show-overflow-tooltip>
         <template slot-scope="scope">
@@ -54,10 +54,17 @@
 
     <!--dialog开始-->
     <el-dialog :visible.sync="dialog" fullscreen :before-close="beforeClose">
+<<<<<<< HEAD
       <div class="dialog-box" v-loading="diaLoading" style="margin:0 auto;">
         <iframe v-if="showWordUrl" :src="showWordUrl" width="80%" :height="dataHeight" frameborder="0" style="margin-left:10%;"></iframe>
         <iframe v-if="pdfUrl" :src="pdfUrl" frameborder="0" :height="dataHeight" style="width:100%;margin-top:10px;"></iframe>
         <!-- <pdf v-if="pdfUrl" :src="pdfUrl" v-for="i in numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; width: 40%;margin-left:30%;"></pdf> -->
+=======
+      <div class="dialog-box" v-loadingData.loading="loadingData.diaLoading" style="margin:0 auto;">
+        <iframe v-if="urlData.showWordUrl" :src="urlData.showWordUrl" width="80%" :height="dataHeight" frameborder="0" style="margin-left:10%;"></iframe>
+        <iframe  v-if="urlData.pdfUrl" :src="urlData.pdfUrl" frameborder="0" :height="dataHeight"  style="width:100%;margin-top:10px;"></iframe>
+        <!-- <pdf v-if=.urlData.pdfUrl" :src=.urlData.pdfUrl" v-for="i in.urlData.numPages" @loaded="pdfLoaded"  :key="i"  :page="i"  style="display: inline-block; width: 40%;margin-left:30%;"></pdf> -->
+>>>>>>> 85b81d85e9c91dbb79ec34a80544900f5e911493
       </div>
     </el-dialog>
     <!--dialog结束-->
@@ -71,12 +78,16 @@ export default {
   data () {
     return {
       dataHeight: document.documentElement.clientHeight - 135,
+      loadingData: {
+        loading: false,
+        diaLoading: false
+      },
       dialog: false,
-      loading: false,
-      diaLoading: false,
-      showWordUrl: '',
-      pdfUrl: loadingTask,
-      numPages: undefined,
+      urlData: {
+        showWordUrl: '',
+        pdfUrl: loadingTask,
+        numPages: undefined
+      },
       searchParam: {
         time: '',
         titleMust: '', // 必含关键词
@@ -109,7 +120,7 @@ export default {
   },
   methods: {
     closeModel () {
-      this.loading = false
+      this.loadingData.loading = false
       this.dialog = false
     },
     typeIndex (index) {
@@ -122,19 +133,15 @@ export default {
       this.searchParam.stock_code = []
       this.getList()
     },
-    getList (flag) {
-      this.loading = true
+    getList () {
+      this.loadingData.loading = true
       var that = this
       var apiPath = ''
-      if (flag) {
-        that.getSearchParam()
-        apiPath = that.apiPath + 'Regulatory_Letters/Pager/' + (this.searchParam.titleMust || '[]') + '/' + (this.searchParam.titleCan || '[]') + '/' + (this.searchParam.titleNot || '[]') + '/' + (this.searchParam.spliteStockCode || '[]') + '/' + (this.searchParam.send_unit || '[]') + '/' + (this.searchParam.reply_status || 0) + '/' + (this.searchParam.template || '[]') + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + this.zPager.currentPage + '/' + this.zPager.size
-      } else {
-        apiPath = that.apiPath + 'Regulatory_Letters/Pager/' + that.zPager.currentPage + '/30'
-      }
+      that.getSearchParam()
+      apiPath = that.apiPath + 'Regulatory_Letters/Pager/' + (this.searchParam.titleMust || '[]') + '/' + (this.searchParam.titleCan || '[]') + '/' + (this.searchParam.titleNot || '[]') + '/' + (this.searchParam.spliteStockCode || '[]') + '/' + (this.searchParam.send_unit || '[]') + '/' + (this.searchParam.reply_status || 0) + '/' + (this.searchParam.template || '[]') + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax.get(apiPath)
         .then(function (response) {
-          that.loading = false
+          that.loadingData.loading = false
           var data = response.data.Result
           that.tableData = data.Data
           that.zPager.total = data.Total
@@ -153,19 +160,19 @@ export default {
       }
     },
     showPDF (urls) { // 展示pdf
-      this.pdfUrl = urls
+      this.urlData.pdfUrl = urls
       this.dialog = true
     },
     showWord (urls) { // 展示word
-      this.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
+      this.urlData.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
       this.dialog = true
     },
     pdfLoaded () { // pdf加载完后清除loading
-      this.diaLoading = false
+      this.loadingData.diaLoading = false
     },
     beforeClose () { // 弹窗关闭之前清除数据
-      this.pdfUrl = ''
-      this.showWordUrl = ''
+      this.urlData.pdfUrl = ''
+      this.urlData.showWordUrl = ''
       this.dialog = false
     },
     getTopData () {
@@ -183,7 +190,7 @@ export default {
         })
     },
     pagerChange () {
-      this.getList(1)
+      this.getList()
     }
   },
   created () {
@@ -197,9 +204,9 @@ export default {
         that.dataHeight = document.documentElement.clientHeight - 135
       })()
     }
-    if (this.pdfUrl) {
-      this.pdfUrl.then(pdf => {
-        this.numPages = pdf.numPages
+    if (this.urlData.pdfUrl) {
+      this.urlData.pdfUrl.then(pdf => {
+        this.urlData.numPages = pdf.urlData.numPages
       })
     }
   }
@@ -207,11 +214,19 @@ export default {
 }
 </script>
 <style>
+<<<<<<< HEAD
 .dialog-box .el-loading-mask {
   width: 40% !important;
   margin-left: 30%;
   background-color: rgba(0, 0, 0, 0);
   z-index: 99999;
+=======
+.dialog-box .el-loadingData.loading-mask{
+  width:40% !important;
+  margin-left:30%;
+  background-color:rgba(0,0,0,0);
+  z-index:99999;
+>>>>>>> 85b81d85e9c91dbb79ec34a80544900f5e911493
 }
 .noMl.ml20 {
   margin-left: 0px;

@@ -1,5 +1,6 @@
 <template>
   <div class="SupervisionType">
+<<<<<<< HEAD
     <!-- 搜索条件开始 -->
     <el-container style="margin-bottom: 10px;">
       <el-input placeholder="包含所有关键词(以空格区分)" v-model="searchParam.titleMust" size="small" clearable class="ml20 noMl"></el-input>
@@ -14,6 +15,42 @@
       <div class="ml20">
         <el-button type="primary" icon="el-icon-search" size="small" @click="loadTableDetail(1)">搜索</el-button>
         <el-button type="warning" size="small" @click="clearParam">清空搜索</el-button>
+=======
+        <!-- 搜索条件开始 -->
+      <el-container style="margin-bottom: 10px;">
+        <el-input placeholder="包含所有关键词(以空格区分)" v-model="searchParam.titleMust"  size="small"  clearable class="ml20 noMl"></el-input>
+        <el-input placeholder="包含任意关键词(以空格区分)" v-model="searchParam.titleCan"  size="small" clearable class="ml20"></el-input>
+        <el-input placeholder="不包含任意关键词(以空格区分)" v-model="searchParam.titleNot"  size="small"  clearable class="ml20"></el-input>
+        <el-select multiple collapse-tags clearable size="small" placeholder="来源" v-model="searchParam.companyMarketId" filterable class="ml20">
+            <el-option  v-for='item in resourceArr' :value="item.Source_ID" :label="item.Source_Name" :key="item.Source_ID"></el-option>
+        </el-select>
+      </el-container>
+      <el-container style="margin-bottom: 10px;">
+        <el-date-picker type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="起始日期" end-placeholder="结束日期" class="ml20 noMl"></el-date-picker>
+        <div class="ml20">
+          <el-button type="primary" icon="el-icon-search" size="small"  @click="loadTableDetail">搜索</el-button>
+         <el-button type="warning"  size="small"  @click="clearParam" >清空搜索</el-button>
+        </div>
+      </el-container>
+      <!-- 搜索条件结束 -->
+      <!--表格开始-->
+     <el-table v-loading="loading" :height="dataHeight"  element-loading-text="拼命加载中" :data="violationCase"  stripe style="width: 100%;" empty-text=" " row-key="id">
+              <el-table-column type="index" label="序号" fixed="left" width="70" :index="typeIndex"></el-table-column>
+              <el-table-column fixed="left" prop="News_Title" label="标题"  min-width="250"  fit show-overflow-tooltip>
+                <template slot-scope="scope">
+                  <span><a :href="scope.row.News_Url" target="_blank" style="color: #0d308c; cursor: pointer; text-decoration:none;">{{ scope.row.News_Title }}</a></span>
+                </template>
+              </el-table-column>
+              <el-table-column  fixed="left" prop="Source_Name" label="来源" width="200"></el-table-column>
+              <el-table-column fixed="left" label="发布日期" prop="News_Date" width="150"></el-table-column>
+      </el-table>
+          <!--表格结束-->
+       <!--分页开始-->
+      <div style="margin-top: 10px;height: 32px; line-height: 32px; text-align: center;">
+        <span style="float: left; text-align: right; color: #606266; font-size: 14px; padding-top: 3px;">共 {{ zPager.total }} 条</span>
+        <el-pagination layout="prev, pager, next" :page-size="zPager.size" :pager-count="zPager.count" :current-page.sync="zPager.currentPage" :total="zPager.total" @current-change="pagerChange">
+        </el-pagination>
+>>>>>>> 85b81d85e9c91dbb79ec34a80544900f5e911493
       </div>
     </el-container>
     <!-- 搜索条件结束 -->
@@ -77,7 +114,7 @@ export default {
         this.searchParam[key] = ''
       }
       this.searchParam.companyMarketId = []
-      this.loadTableDetail(1)
+      this.loadTableDetail()
     },
     loadSources () {
       var that = this
@@ -88,15 +125,11 @@ export default {
           that.resourceArr = response.data.Result.Data
         })
     },
-    loadTableDetail (param) {
+    loadTableDetail () {
       var that = this
       var api = that.apiPath + 'DynamicNews/Pager'
-      if (param) {
-        this.getSearchParam()
-        api = api + '/' + (this.searchParam.titleMust || '[]') + '/' + (this.searchParam.titleCan || '[]') + '/' + (this.searchParam.titleNot || '[]') + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + (this.searchSourceNu || '[]') + '/' + this.zPager.currentPage + '/' + this.zPager.size
-      } else {
-        api = api + '/' + this.zPager.currentPage + '/' + this.zPager.size
-      }
+      this.getSearchParam()
+      api = api + '/' + (this.searchParam.titleMust || '[]') + '/' + (this.searchParam.titleCan || '[]') + '/' + (this.searchParam.titleNot || '[]') + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + (this.searchSourceNu || '[]') + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax
         .get(api)
         .then(function (response) {
