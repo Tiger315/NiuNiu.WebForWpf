@@ -2,9 +2,9 @@
   <div class="IrregularitiesType">
     <el-container :height="leftHeight">
       <el-aside width="20%" :height="leftHeight" class="left">
-        <div class="title">违规类型</div>
+        <div :class="titleActive==true?'title active':'title'" @click="searchList(-1)">违规类型</div>
         <div  style="display: -ms-flexbox;display: flex;-ms-flex-direction: row;flex-direction: row;-ms-flex: 1;flex: 1;-ms-flex-preferred-size: auto;flex-basis: auto;box-sizing: border-box;min-width: 0;">
-          <el-tree v-loading="loadingData.leftDataLoading" :data="treeData"></el-tree>
+          <el-tree v-loading="loadingData.leftDataLoading" :data="treeData"  @node-click="searchList"></el-tree>
         </div>
       </el-aside>
       <el-container>
@@ -161,7 +161,9 @@ export default {
       msgId: '',
       pdfUrl: loadingTask,
       numPages: undefined,
+      titleActive: true, // 左侧标题是否为选中状态
       searchParam: {
+        treeCode: '',
         titleMust: '', // 必含关键词
         titleCan: '', // 可含关键词
         titleNot: '', // 不含关键词
@@ -227,18 +229,40 @@ export default {
       this.searchParam.count = 11
       this.searchParam.sortType = 'desc'
       this.searchParam.currentPage = 1
-      this.searchList()
+      this.titleActive = true
+      this.searchList(-1)
     },
     showDetail (id) {
       this.dialog = true
       this.searchId = id
       this.getDetail(this.searchId)
     },
-    searchList () {
+    searchList (flag) { // flag标记是否是点击左侧的tree加载表格
+      if (flag && flag !== -1) {
+        this.treeCode = flag.Code
+        this.titleActive = false
+      } else if (flag === -1) { // 点击的是左侧tree的标题，样式为选中状态并且重新加载表格
+        this.titleActive = true
+        this.treeCode = ''
+      } else {
+        this.titleActive = false
+      }
       this.loadingData.loading = true
       var that = this
       that.getSearchParam()
-      var searchParams = that.apiPath + 'XA_Wgal/Pager/' + (that.searchParam.titleMust || '[]') + '/' + (that.searchParam.titleCan || '[]') + '/' + (that.searchParam.titleNot || '[]') + '/' + (that.searchParam.processDateStart || '[]') + '/' + (that.searchParam.processDateEnd || '[]') + '/' + (that.searchParam.spliteStockCode || '[]') + '/' + (that.searchParam.companyMarketId || '[]') + '/' + (that.searchParam.industryInfo || '[]') + '/' + (that.searchParam.companyArea || '[]') + '/' + (that.searchParam.involveObjectId || '[]') + '/' + (that.searchParam.supervisionOrganId || '[]') + '/' + that.searchParam.currentPage + '/30'
+      var treeCode = this.treeCode || encodeURI('[]')
+      var titleMust = (that.searchParam.titleMust && encodeURI(that.searchParam.titleMust)) || encodeURI('[]')
+      var titleCan = (that.searchParam.titleCan && encodeURI(that.searchParam.titleCan)) || encodeURI('[]')
+      var titleNot = (that.searchParam.titleCan && encodeURI(that.searchParam.titleNot)) || encodeURI('[]')
+      var companyMarketId = (that.searchParam.companyMarketId && encodeURI(that.searchParam.companyMarketId)) || encodeURI('[]')
+      var industryInfo = (that.searchParam.industryInfo && encodeURI(that.searchParam.industryInfo)) || encodeURI('[]')
+      var companyArea = (that.searchParam.companyArea && encodeURI(that.searchParam.companyArea)) || encodeURI('[]')
+      var involveObjectId = (that.searchParam.involveObjectId && encodeURI(that.searchParam.involveObjectId)) || encodeURI('[]')
+      var supervisionOrganId = (that.searchParam.supervisionOrganId && encodeURI(that.searchParam.supervisionOrganId)) || encodeURI('[]')
+      var searchParams = that.apiPath + 'XA_Wgal/' + titleMust + '/' + titleCan + '/' + titleNot + '/' +
+      (that.searchParam.processDateStart || encodeURI('[]')) + '/' + (that.searchParam.processDateEnd || encodeURI('[]')) + '/' +
+      (that.searchParam.spliteStockCode || encodeURI('[]')) + '/' + companyMarketId +
+      '/' + industryInfo + '/' + companyArea + '/' + involveObjectId + '/' + supervisionOrganId + '/' + treeCode + '/' + that.searchParam.currentPage + '/30'
       that.$ajax.get(searchParams)
         .then(function (response) {
           that.loadingData.loading = false
@@ -535,5 +559,8 @@ span.detail_date {
   color: rgba(0, 0, 0, 0.65);
   font-weight: 300;
   cursor: pointer;
+}
+.IrregularitiesType .title:hover,.IrregularitiesType .title.active{
+  background-color: #f5f7fa;
 }
 </style>
