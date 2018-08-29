@@ -1,36 +1,35 @@
 <template>
   <div class="Presentation">
     <!-- 搜索条件开始 -->
-    <el-container style="margin-bottom:10px;">
+    <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
       <el-input placeholder="包含所有关键词(以空格区分)" v-model="searchParam.titleMust" size="small" clearable class="ml20 noMl"></el-input>
       <el-input placeholder="包含任意关键词(以空格区分)" v-model="searchParam.titleCan" size="small" clearable class="ml20"></el-input>
       <el-input placeholder="不包含任意关键词(以空格区分)" v-model="searchParam.titleNot" size="small" clearable class="ml20"></el-input>
-      <el-select multiple collapse-tags clearable size="small" v-model="searchParam.stock_code" placeholder="公司代码、简称、拼音" filterable class="ml20">
+    </el-container>
+    <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
+      <el-select multiple collapse-tags clearable size="small" v-model="searchParam.stock_code" placeholder="公司代码、简称、拼音" filterable class="ml20 noMl">
         <el-option v-for='item in topData.companyCode' :key="item.Company_Name+'('+item.Company_Code+')'" :label="item.Company_Name+'('+item.Company_Code+')'" :value="item.Company_Code"></el-option>
       </el-select>
-    </el-container>
-    <el-container style="margin-bottom:10px;">
-      <el-select collapse-tags clearable size="small" placeholder="研究机构" v-model="searchParam.template" filterable class="ml20 noMl">
+       <el-select collapse-tags clearable size="small" placeholder="研究机构" v-model="searchParam.template" filterable class="ml20">
         <el-option v-for='item in topData.bankuai' :key="item.Value" :label="item.Text" :value="item.Value"></el-option>
       </el-select>
       <el-select collapse-tags clearable size="small" v-model="searchParam.reply_status" placeholder="研报作者" filterable class="ml20">
         <el-option v-for='item in topData.replyStatus' :key="item.code" :label="item.status" :value="item.code"></el-option>
       </el-select>
-      <el-date-picker type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" class="ml20"></el-date-picker>
+    </el-container>
+    <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
+      <el-date-picker style="width:400px;" type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" class="ml20 noMl"></el-date-picker>
       <el-select collapse-tags clearable size="small" v-model="searchParam.reply_status" placeholder="所有评级" filterable class="ml20">
         <el-option v-for='item in topData.replyStatus' :key="item.code" :label="item.status" :value="item.code"></el-option>
       </el-select>
-    </el-container>
-    <el-container style="margin-bottom:10px;">
-      <div>
+      <div class="ml20">
         <el-button type="primary" icon="el-icon-search" size="small" @click="getList">搜索</el-button>
         <el-button type="warning" size="small" @click="clearParam">清空搜索</el-button>
       </div>
     </el-container>
     <!-- 搜索条件结束 -->
-
     <!-- 表格数据开始 -->
-    <el-table v-loading.loading="loadingData.loading" element-loading.loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
+    <el-table v-loading.loading="loadingData.loading" element-loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
       <el-table-column type="index" fixed="left" label="序号" width="70" :index="typeIndex">序号</el-table-column>
       <el-table-column fixed="left" prop="Title" label="研报标题" min-width="200" fit show-overflow-tooltip>
       </el-table-column>
@@ -46,7 +45,6 @@
       </el-table-column>
     </el-table>
     <!-- 表格数据结束 -->
-
     <!--分页开始-->
     <div style="margin-top: 10px;height: 32px; line-height: 32px; text-align: center;">
       <span style="float: left; text-align: right; color: #606266; font-size: 14px; padding-top: 3px;">共 {{ zPager.total }} 条</span>
@@ -174,7 +172,7 @@ export default {
 }
 .ml20 {
   margin-left: 20px;
-  width: 350px;
+  width: 400px;
 }
 .Presentation .el-dialog {
   background-color: rgba(0, 0, 0, 0.3);

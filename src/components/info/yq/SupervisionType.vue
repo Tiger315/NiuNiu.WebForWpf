@@ -1,16 +1,16 @@
 <template>
   <div class="SupervisionType">
     <!-- 搜索条件开始 -->
-    <el-container style="margin-bottom: 10px;">
+    <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
       <el-input placeholder="包含所有关键词(以空格区分)" v-model="searchParam.titleMust" size="small" clearable class="ml20 noMl"></el-input>
       <el-input placeholder="包含任意关键词(以空格区分)" v-model="searchParam.titleCan" size="small" clearable class="ml20"></el-input>
       <el-input placeholder="不包含任意关键词(以空格区分)" v-model="searchParam.titleNot" size="small" clearable class="ml20"></el-input>
-      <el-select multiple collapse-tags clearable size="small" placeholder="来源" v-model="searchParam.companyMarketId" filterable class="ml20">
+    </el-container>
+    <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
+      <el-select multiple collapse-tags clearable size="small" placeholder="来源" v-model="searchParam.companyMarketId" filterable class="ml20 noMl">
         <el-option v-for='item in resourceArr' :value="item.Source_ID" :label="item.Source_Name" :key="item.Source_ID"></el-option>
       </el-select>
-    </el-container>
-    <el-container style="margin-bottom: 10px;">
-      <el-date-picker type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="起始日期" end-placeholder="结束日期" class="ml20 noMl"></el-date-picker>
+      <el-date-picker type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="起始日期" end-placeholder="结束日期" class="ml20"></el-date-picker>
       <div class="ml20">
         <el-button type="primary" icon="el-icon-search" size="small" @click="loadTableDetail">搜索</el-button>
         <el-button type="warning" size="small" @click="clearParam">清空搜索</el-button>
@@ -158,7 +158,7 @@ export default {
 }
 .ml20 {
   margin-left: 20px;
-  width: 350px;
+  width: 400px;
 }
 
 .title {

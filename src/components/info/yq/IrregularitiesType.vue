@@ -14,26 +14,28 @@
             <el-input placeholder="必含关键词（以空格区分）" v-model="searchParam.titleMust" size="small" clearable></el-input>
             <el-input placeholder="可含关键词（以空格区分）" v-model="searchParam.titleCan" size="small" clearable></el-input>
             <el-input placeholder="不含关键词（以空格区分）" v-model="searchParam.titleNot" size="small" clearable></el-input>
-            <el-date-picker type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-container>
           <el-container style="margin-top: 10px;">
+            <el-date-picker type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
             <el-select multiple collapse-tags clearable size="small" v-model="searchParam.companyCode" placeholder="请输入公司代码、简称" filterable>
               <el-option :label="item.Name+'('+item.Code+')'" :key="item.Name+'('+item.Code+')'" v-for='item in topData.StockInfo' :value="item.Code"></el-option>
             </el-select>
             <el-select collapse-tags clearable size="small" placeholder="所属板块" v-model="searchParam.companyMarketId" filterable>
               <el-option :value="item" :key="item" v-for='item in topData.area'></el-option>
             </el-select>
+          </el-container>
+          <el-container style="margin-top: 10px;">
             <el-select collapse-tags clearable size="small" placeholder="所属行业" v-model="searchParam.industryInfo" filterable>
               <el-option :value="item.name" :key="item.id" v-for='item in topData.industry'></el-option>
             </el-select>
             <el-select collapse-tags clearable size="small" placeholder="所属地区" v-model="searchParam.companyArea" filterable>
               <el-option :value="item" :key="item" v-for='item in topData.procvince'></el-option>
             </el-select>
-          </el-container>
-          <el-container style="margin-top: 10px; margin-bottom: 10px;justify-content:left;">
             <el-select collapse-tags multiple clearable size="small" v-model="searchParam.involveObjectId" placeholder="处罚对象" filterable>
               <el-option :value="item" :key="item" v-for='item in topData.chufaRole'></el-option>
             </el-select>
+          </el-container>
+          <el-container style="margin-top: 10px; margin-bottom: 10px;justify-content:left;">
             <el-select collapse-tags clearable size="small" placeholder="处罚机构" v-model="searchParam.supervisionOrganId" filterable>
               <el-option :value="item.name" :key="item.id" v-for='item in topData.jys'></el-option>
             </el-select>
@@ -154,7 +156,7 @@ export default {
     return {
       leftHeight: document.documentElement.clientHeight - 35,
       leftModelHeight: document.documentElement.clientHeight - 30 + '',
-      tableHeight: document.documentElement.clientHeight - 190,
+      tableHeight: document.documentElement.clientHeight - 232,
       zhankai: false,
       dialog: false,
       tableData: [],
@@ -396,7 +398,7 @@ export default {
     const that = this
     window.onresize = () => {
       return (() => {
-        that.tableHeight = document.documentElement.clientHeight - 190
+        that.tableHeight = document.documentElement.clientHeight - 232
         that.leftHeight = document.documentElement.clientHeight - 35
       })()
     }
@@ -497,7 +499,7 @@ width:180px;
   justify-content: center;
 }
 .el-container > div {
-  width: 25%;
+  width: 33.3%;
   margin: 0 15px;
   box-sizing: border-box;
 }
