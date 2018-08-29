@@ -4,7 +4,7 @@
       <el-aside width="20%" :height="leftHeight" class="left">
         <div :class="titleActive==true?'title active':'title'" @click="searchList(-1)">违规类型</div>
         <div  style="display: -ms-flexbox;display: flex;-ms-flex-direction: row;flex-direction: row;-ms-flex: 1;flex: 1;-ms-flex-preferred-size: auto;flex-basis: auto;box-sizing: border-box;min-width: 0;">
-          <el-tree v-loading="loadingData.leftDataLoading" :data="treeData"  @node-click="searchList"></el-tree>
+          <el-tree v-loading="loadingData.leftDataLoading" :expand-on-click-node="zhankai" :data="treeData"  @node-click="searchList"></el-tree>
         </div>
       </el-aside>
       <el-container>
@@ -155,6 +155,7 @@ export default {
       leftHeight: document.documentElement.clientHeight - 35,
       leftModelHeight: document.documentElement.clientHeight - 30 + '',
       tableHeight: document.documentElement.clientHeight - 190,
+      zhankai: false,
       dialog: false,
       tableData: [],
       treeData: [],
