@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import SupervisionType from '@/components/info/yq/SupervisionType' // 舆情监管动态
 import IrregularitiesType from '@/components/info/yq/IrregularitiesType' // 舆情违规案例
 import Feedback from '@/components/info/yq/Feedback' // 舆情监管函件
+import Presentation from '@/components/info/yjbg/presentation' // 研究报告
 
 Vue.use(Router)
 
@@ -21,6 +22,10 @@ export default new Router({
       path: '/yq/Feedback',
       name: ' Feedback',
       component: Feedback
+    }, {
+      path: '/yjbg/presentation',
+      name: ' Presentation',
+      component: Presentation
     }
   ]
 })
