@@ -11,11 +11,9 @@
         <el-option v-for='item in topData.companyCode' :key="item.Company_Name+'('+item.Company_Code+')'" :label="item.Company_Name+'('+item.Company_Code+')'" :value="item.Company_Code"></el-option>
       </el-select>
        <el-select collapse-tags clearable size="small" placeholder="研究机构" v-model="searchParam.template" filterable class="ml20">
-        <el-option v-for='item in topData.bankuai' :key="item.Value" :label="item.Text" :value="item.Value"></el-option>
+        <el-option v-for='item in topData.yjjg' :key="item" :label="item" :value="item"></el-option>
       </el-select>
-      <el-select collapse-tags clearable size="small" v-model="searchParam.reply_status" placeholder="研报作者" filterable class="ml20">
-        <el-option v-for='item in topData.replyStatus' :key="item.code" :label="item.status" :value="item.code"></el-option>
-      </el-select>
+      <el-input placeholder="研报作者" v-model="searchParam.author" size="small" clearable class="ml20"></el-input>
     </el-container>
     <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
       <el-date-picker style="width:400px;" type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" class="ml20 noMl"></el-date-picker>
@@ -78,7 +76,37 @@ export default {
         processDateEnd: '' // 结束时间
       },
       topData: {
-
+        yjjg: [
+          '安信证券',
+          '财富证券',
+          '东北证券',
+          '东方财富证券',
+          '东方证券',
+          '东海证券',
+          '东莞证券',
+          '富盛投顾',
+          '广发证券',
+          '广证恒生',
+          '国金证券',
+          '国信证券',
+          '恒泰证券',
+          '宏信证券',
+          '华创证券',
+          '华泰证券',
+          '联储证券',
+          '莫尼塔投资',
+          '平安证券',
+          '山西证券',
+          '上海证券',
+          '西南证券',
+          '信达证券',
+          '兴业证券',
+          '招商证券',
+          '中泰证券',
+          '中投证券',
+          '中银国际证券',
+          '中原证券'
+        ]
       },
       tableData: [],
       zPager: {
