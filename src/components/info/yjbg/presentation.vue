@@ -134,7 +134,10 @@ export default {
       that.getSearchParam()
       let apiPath = ''
       // apiPath = that.apiPath + 'Regulatory_Letters/Pager/' + (this.searchParam.titleMust || '[]') + '/' + (this.searchParam.titleCan || '[]') + '/' + (this.searchParam.titleNot || '[]') + '/' + (this.searchParam.spliteStockCode || '[]') + '/' + (this.searchParam.send_unit || '[]') + '/' + (this.searchParam.reply_status || 0) + '/' + (this.searchParam.template || '[]') + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + this.zPager.currentPage + '/' + this.zPager.size
-      apiPath = that.apiPath + 'Yjbg/' + this.zPager.currentPage + '/' + this.zPager.size
+      let titleMust = (this.searchParam.titleMust && encodeURI(this.searchParam.titleMust)) || '[]'// 包含所有关键字
+      let titleCan = (this.searchParam.titleCan && encodeURI(this.searchParam.titleCan)) || '[]'// 可以包含关键字
+      let titleNot = (this.searchParam.titleNot && encodeURI(this.searchParam.titleNot)) || '[]' // 不包含任意关键字
+      apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax.get(apiPath)
         .then(function (response) {
           that.loadingData.loading = false
