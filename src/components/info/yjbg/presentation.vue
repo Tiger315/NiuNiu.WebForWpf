@@ -16,7 +16,7 @@
       <el-input placeholder="研报作者" v-model="searchParam.author" size="small" clearable class="ml20"></el-input>
     </el-container>
     <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
-      <el-date-picker style="width:400px;" type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" class="ml20 noMl"></el-date-picker>
+      <el-date-picker type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" class="ml20 noMl"></el-date-picker>
       <el-select collapse-tags clearable size="small" v-model="searchParam.rate" placeholder="所有评级" filterable class="ml20">
         <el-option v-for='item in topData.rate' :key="item" :label="item" :value="item"></el-option>
       </el-select>
@@ -240,7 +240,7 @@ export default {
 }
 .ml20 {
   margin-left: 20px;
-  width: 400px;
+  width: 400px !important;
 }
 .Presentation .el-dialog {
   background-color: rgba(0, 0, 0, 0.3);
