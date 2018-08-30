@@ -8,9 +8,9 @@
     </el-container>
     <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
       <el-select multiple collapse-tags clearable size="small" v-model="searchParam.stock_code" placeholder="公司代码、简称、拼音" filterable class="ml20 noMl">
-        <el-option v-for='item in topData.companyCode' :key="item.Company_Name+'('+item.Company_Code+')'" :label="item.Company_Name+'('+item.Company_Code+')'" :value="item.Company_Code"></el-option>
+        <el-option :label="item.Name+'('+item.Code+')'" :key="item.Name+'('+item.Code+')'" v-for='item in topData.companyCode' :value="item.Code"></el-option>
       </el-select>
-       <el-select collapse-tags clearable size="small" placeholder="研究机构" v-model="searchParam.template" filterable class="ml20">
+       <el-select collapse-tags clearable size="small" placeholder="研究机构" v-model="searchParam.yjjg" filterable class="ml20">
         <el-option v-for='item in topData.yjjg' :key="item" :label="item" :value="item"></el-option>
       </el-select>
       <el-input placeholder="研报作者" v-model="searchParam.author" size="small" clearable class="ml20"></el-input>
@@ -69,6 +69,8 @@ export default {
         titleNot: '', // 不含关键词
         stock_code: [], // 公司代码
         spliteStockCode: '',
+        yjjg: '', // 研究机构
+        author: '', // 研报作者
         send_unit: '', // 发文单位
         reply_status: '', // 回复状态
         template: '', // 所属板块
@@ -106,7 +108,8 @@ export default {
           '中投证券',
           '中银国际证券',
           '中原证券'
-        ]
+        ],
+        companyCode: []
       },
       tableData: [],
       zPager: {
@@ -137,7 +140,10 @@ export default {
       let titleMust = (this.searchParam.titleMust && encodeURI(this.searchParam.titleMust)) || '[]'// 包含所有关键字
       let titleCan = (this.searchParam.titleCan && encodeURI(this.searchParam.titleCan)) || '[]'// 可以包含关键字
       let titleNot = (this.searchParam.titleNot && encodeURI(this.searchParam.titleNot)) || '[]' // 不包含任意关键字
-      apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + this.zPager.currentPage + '/' + this.zPager.size
+      let stockCode = this.searchParam.spliteStockCode || '[]' // 公司代码
+      let yjjg = (this.searchParam.yjjg && encodeURI(this.searchParam.yjjg)) || '[]' // 研究机构
+      let author = (this.searchParam.author && encodeURI(this.searchParam.author)) || '[]' // 研报作者
+      apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + yjjg + '/' + author + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax.get(apiPath)
         .then(function (response) {
           that.loadingData.loading = false
@@ -166,7 +172,7 @@ export default {
           that.topData.bankuai = data
         })
 
-      that.$ajax.get(that.apiPath + 'Regulatory_Letters_Company')
+      that.$ajax.get(that.apiPath + 'StockInfo')
         .then(function (response) {
           let data = response.data.Result.Data
           that.topData.companyCode = data
