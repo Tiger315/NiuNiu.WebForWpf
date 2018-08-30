@@ -31,7 +31,7 @@
       <el-table-column type="index" fixed="left" label="序号" width="70" :index="typeIndex">序号</el-table-column>
       <el-table-column fixed="left" prop="Title" label="研报标题" min-width="200" fit show-overflow-tooltip>
         <template slot-scope="scope">
-          <div>{{scope.row.StockName?(scope.row.StockName+":"+scope.row.Title):scope.row.Title}}</div>
+          <div>{{scope.row.StockName?("【 "+scope.row.StockName+" 】"+scope.row.Title):scope.row.Title}}</div>
         </template>
       </el-table-column>
       <el-table-column prop="Rate" label="股票评级" min-width="60" fit show-overflow-tooltip>
