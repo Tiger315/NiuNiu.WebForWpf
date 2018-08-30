@@ -159,8 +159,14 @@ export default {
       this.dialog = true
     },
     showWord (urls) { // 展示word
-      this.urlData.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
-      this.dialog = true
+      var Idx = urls.indexOf('pdf')
+      if (Idx === -1) {
+        this.urlData.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
+        this.dialog = true
+      }
+      if (Idx >= 0) {
+        this.showPDF(urls)
+      }
     },
     pdfLoaded () { // pdf加载完后清除loading
       this.loadingData.diaLoading = false
