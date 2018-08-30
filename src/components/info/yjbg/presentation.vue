@@ -17,8 +17,8 @@
     </el-container>
     <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
       <el-date-picker style="width:400px;" type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" class="ml20 noMl"></el-date-picker>
-      <el-select collapse-tags clearable size="small" v-model="searchParam.reply_status" placeholder="所有评级" filterable class="ml20">
-        <el-option v-for='item in topData.replyStatus' :key="item.code" :label="item.status" :value="item.code"></el-option>
+      <el-select collapse-tags clearable size="small" v-model="searchParam.rate" placeholder="所有评级" filterable class="ml20">
+        <el-option v-for='item in topData.rate' :key="item" :label="item" :value="item"></el-option>
       </el-select>
       <div class="ml20">
         <el-button type="primary" icon="el-icon-search" size="small" @click="getList">搜索</el-button>
@@ -30,6 +30,9 @@
     <el-table v-loading.loading="loadingData.loading" element-loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
       <el-table-column type="index" fixed="left" label="序号" width="70" :index="typeIndex">序号</el-table-column>
       <el-table-column fixed="left" prop="Title" label="研报标题" min-width="200" fit show-overflow-tooltip>
+        <template slot-scope="scope">
+          <div>{{scope.row.StockName?(scope.row.StockName+":"+scope.row.Title):scope.row.Title}}</div>
+        </template>
       </el-table-column>
       <el-table-column prop="Rate" label="股票评级" min-width="60" fit show-overflow-tooltip>
       </el-table-column>
@@ -38,7 +41,7 @@
       <el-table-column prop="ReportTime" label="发布日期" width="150"></el-table-column>
       <el-table-column prop="SendDate" width="150" label="操作">
         <template slot-scope="scope">
-          <a style="color: #0d308c; cursor: pointer; text-decoration:none;" :href="scope.row.FileUrl" download>下载</a>
+          <div style="color: #0d308c; cursor: pointer; text-decoration:none;" @click='showPDF(scope.row.FileUrl)'>预览</div>
         </template>
       </el-table-column>
     </el-table>
@@ -50,7 +53,13 @@
       </el-pagination>
     </div>
     <!--分页结束-->
-
+ <!--dialog开始-->
+    <el-dialog :visible.sync="dialog" fullscreen :before-close="beforeClose">
+      <div class="dialog-box" v-loading.loading="loadingData.diaLoading" style="margin:0 auto;">
+        <iframe v-if="urlData.showWordUrl" :src="urlData.showWordUrl" width="80%" :height="dataHeight" frameborder="0" style="margin-left:10%;"></iframe>
+        <iframe v-if="urlData.pdfUrl" :src="urlData.pdfUrl" frameborder="0" :height="dataHeight" style="width:80%;margin-top:10px;margin-left:10%;"></iframe>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -62,6 +71,7 @@ export default {
       loadingData: {
         loading: false
       },
+      dialog: false,
       searchParam: {
         time: '',
         titleMust: '', // 必含关键词
@@ -71,11 +81,13 @@ export default {
         spliteStockCode: '',
         yjjg: '', // 研究机构
         author: '', // 研报作者
-        send_unit: '', // 发文单位
-        reply_status: '', // 回复状态
-        template: '', // 所属板块
+        rate: '',
         processDateStart: '', // 起始时间
         processDateEnd: '' // 结束时间
+      },
+      urlData: {
+        'pdfUrl': '',
+        'showWordUrl': ''
       },
       topData: {
         yjjg: [
@@ -109,7 +121,8 @@ export default {
           '中银国际证券',
           '中原证券'
         ],
-        companyCode: []
+        companyCode: [],
+        rate: ['增持', '买入', '卖出', '持有']
       },
       tableData: [],
       zPager: {
@@ -131,6 +144,23 @@ export default {
       this.searchParam.stock_code = []
       this.getList()
     },
+    showPDF (urls) { // 展示pdf
+      this.urlData.pdfUrl = urls
+      var Idx = urls.indexOf('pdf')
+      if (Idx === -1) { // 判断如果不是pdf文件，调用word
+        this.showWord(urls)
+      }
+      this.dialog = true
+    },
+    showWord (urls) { // 展示word
+      this.urlData.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
+      this.dialog = true
+    },
+    beforeClose () { // 弹窗关闭之前清除数据
+      this.urlData.pdfUrl = ''
+      this.urlData.showWordUrl = ''
+      this.dialog = false
+    },
     getList () {
       this.loadingData.loading = true
       let that = this
@@ -143,7 +173,8 @@ export default {
       let stockCode = this.searchParam.spliteStockCode || '[]' // 公司代码
       let yjjg = (this.searchParam.yjjg && encodeURI(this.searchParam.yjjg)) || '[]' // 研究机构
       let author = (this.searchParam.author && encodeURI(this.searchParam.author)) || '[]' // 研报作者
-      apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + yjjg + '/' + author + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + this.zPager.currentPage + '/' + this.zPager.size
+      let rate = (this.searchParam.rate && encodeURI(this.searchParam.rate)) || '[]' // 研报作者
+      apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + yjjg + '/' + author + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + rate + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax.get(apiPath)
         .then(function (response) {
           that.loadingData.loading = false
