@@ -37,7 +37,7 @@
       </el-table-column>
       <el-table-column prop="Company_ReplyName" label="公司回复" min-width="200" fit show-overflow-tooltip>
         <template slot-scope="scope">
-          <div v-for="(item,key) in scope.row.Reply" :key="key"  style="color: #0d308c; cursor: pointer; " @click="showPDF(item.ReplyUrl)">
+          <div v-for="(item,key) in scope.row.Reply" :key="key"  style="color: #0d308c; cursor: pointer;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;  " @click="showPDF(item.ReplyUrl)">
             {{ item.ReplyName }}
           </div>
         </template>
