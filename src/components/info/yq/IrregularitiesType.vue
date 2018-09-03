@@ -16,26 +16,28 @@
             <el-input placeholder="不含关键词（以空格区分）" v-model="searchParam.titleNot" size="small" clearable></el-input>
           </el-container>
           <el-container style="margin-top: 10px;">
-            <el-date-picker type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+            <el-date-picker v-model="searchParam.processDateStart" type="date" placeholder="开始日期"></el-date-picker>
+            <el-date-picker v-model="searchParam.processDateEnd" type="date" placeholder="结束日期"></el-date-picker>
             <el-select multiple collapse-tags clearable size="small" v-model="searchParam.companyCode" placeholder="请输入公司代码、简称" filterable>
               <el-option :label="item.Name+'('+item.Code+')'" :key="item.Name+'('+item.Code+')'" v-for='item in topData.StockInfo' :value="item.Code"></el-option>
             </el-select>
-            <el-select collapse-tags clearable size="small" placeholder="所属板块" v-model="searchParam.companyMarketId" filterable>
-              <el-option :value="item" :key="item" v-for='item in topData.area'></el-option>
-            </el-select>
+
           </el-container>
           <el-container style="margin-top: 10px;">
+             <el-select collapse-tags clearable size="small" placeholder="所属板块" v-model="searchParam.companyMarketId" filterable>
+              <el-option :value="item" :key="item" v-for='item in topData.area'></el-option>
+            </el-select>
             <el-select collapse-tags clearable size="small" placeholder="所属行业" v-model="searchParam.industryInfo" filterable>
               <el-option :value="item.name" :key="item.id" v-for='item in topData.industry'></el-option>
             </el-select>
             <el-select collapse-tags clearable size="small" placeholder="所属地区" v-model="searchParam.companyArea" filterable>
               <el-option :value="item" :key="item" v-for='item in topData.procvince'></el-option>
             </el-select>
+          </el-container>
+          <el-container style="margin-top: 10px; margin-bottom: 10px;justify-content:left;">
             <el-select collapse-tags multiple clearable size="small" v-model="searchParam.involveObjectId" placeholder="处罚对象" filterable>
               <el-option :value="item" :key="item" v-for='item in topData.chufaRole'></el-option>
             </el-select>
-          </el-container>
-          <el-container style="margin-top: 10px; margin-bottom: 10px;justify-content:left;">
             <el-select collapse-tags clearable size="small" placeholder="处罚机构" v-model="searchParam.supervisionOrganId" filterable>
               <el-option :value="item.name" :key="item.id" v-for='item in topData.jys'></el-option>
             </el-select>
@@ -43,7 +45,6 @@
               <el-button type="primary" icon="el-icon-search" size="small" @click="searchList">搜索</el-button>
               <el-button type="warning" size="small" @click="clearParam">清空搜索</el-button>
             </div>
-            <div></div>
           </el-container>
         </el-header>
         <!-- 搜索条件结束 -->
@@ -173,7 +174,7 @@ export default {
         companyCode: '', // 公司代码简称
         involveObjectId: '', // 处罚对象身份
         avermentId: '', // 申辩情况
-        processDateStart: '', // 起始结束时间
+        processDateStart: '', // 起始时间
         processDateEnd: '', // 结束时间
         companyMarketId: '', // 所属板块
         industryInfo: '', // 所属行业
@@ -283,8 +284,8 @@ export default {
     getSearchParam () {
       // 获取查询的参数
       // 处   理开始结束时间
-      this.searchParam.processDateStart = this.searchParam.time && this.dealDate(this.searchParam.time[0]) // 开始时间
-      this.searchParam.processDateEnd = this.searchParam.time && this.dealDate(this.searchParam.time[1]) // 结束时间
+      this.searchParam.processDateStart = this.searchParam.processDateStart && this.dealDate(this.searchParam.processDateStart) // 开始时间
+      this.searchParam.processDateEnd = this.searchParam.processDateEnd && this.dealDate(this.searchParam.processDateEnd) // 结束时间
       // 处理公司代码
       if (this.searchParam && this.searchParam.companyCode) {
         this.searchParam.companyCode.length > 1 ? this.searchParam.spliteStockCode = this.searchParam.companyCode.join(',') : this.searchParam.spliteStockCode = this.searchParam.companyCode[0]
@@ -411,6 +412,10 @@ export default {
 }
 </script>
 <style>
+.ml20 {
+  margin-left: 20px;
+  width: 33.3% !important;
+}
 .el-tree__empty-block{
 width:180px;
 }

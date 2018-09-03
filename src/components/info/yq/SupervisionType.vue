@@ -10,7 +10,10 @@
       <el-select multiple collapse-tags clearable size="small" placeholder="来源" v-model="searchParam.companyMarketId" filterable class="ml20 noMl">
         <el-option v-for='item in resourceArr' :value="item.Source_ID" :label="item.Source_Name" :key="item.Source_ID"></el-option>
       </el-select>
-      <el-date-picker type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="起始日期" end-placeholder="结束日期" class="ml20"></el-date-picker>
+        <el-date-picker v-model="searchParam.processDateStart" type="date" placeholder="开始日期" class="ml20 noMl"></el-date-picker>
+      <el-date-picker v-model="searchParam.processDateEnd" type="date" placeholder="结束日期" class="ml20"></el-date-picker>
+    </el-container>
+      <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
       <div class="ml20">
         <el-button type="primary" icon="el-icon-search" size="small" @click="loadTableDetail">搜索</el-button>
         <el-button type="warning" size="small" @click="clearParam">清空搜索</el-button>
@@ -106,8 +109,8 @@ export default {
     },
     getSearchParam () {
       // 获取查询的参数
-      this.searchParam.processDateStart = this.searchParam.time && this.dealDate(this.searchParam.time[0]) // 开始时间
-      this.searchParam.processDateEnd = this.searchParam.time && this.dealDate(this.searchParam.time[1]) // 结束时间
+      this.searchParam.processDateStart = this.searchParam.processDateStart && this.dealDate(this.searchParam.processDateStart) // 开始时间
+      this.searchParam.processDateEnd = this.searchParam.processDateEnd && this.dealDate(this.searchParam.processDateEnd) // 结束时间
       //
       if (this.searchParam && this.searchParam.companyMarketId) {
         this.searchParam.companyMarketId.length > 1 ? this.searchSourceNu = this.searchParam.companyMarketId.join(',') : this.searchSourceNu = this.searchParam.companyMarketId[0]
@@ -199,6 +202,10 @@ span.detail_date {
 }
 .showData {
   border-bottom: 1px solid #f2f4f7;
+}
+.ml20 {
+  margin-left: 20px;
+  width: 33.3% !important;
 }
 ul#detail_list {
   margin: 0px;
