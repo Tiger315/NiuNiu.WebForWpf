@@ -8,7 +8,8 @@
     </el-container>
     <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
         <el-select multiple collapse-tags clearable size="small" v-model="searchParam.stock_code" placeholder="公司代码、简称、拼音" filterable class="ml20 noMl">
-          <el-option v-for='item in topData.companyCode' :key="item.Company_Name+'('+item.Company_Code+')'" :label="item.Company_Name+'('+item.Company_Code+')'" :value="item.Company_Code"></el-option>
+          <el-option :label="item.Name+'('+item.Code+')'" :key="item.Name+'('+item.Code+')'" v-for='item in topData.companyCode' :value="item.Code"></el-option>
+          <!-- <el-option v-for='item in topData.companyCode' :key="item.Company_Name+'('+item.Company_Code+')'" :label="item.Company_Name+'('+item.Company_Code+')'" :value="item.Company_Code"></el-option> -->
         </el-select>
         <el-select collapse-tags clearable size="small" placeholder="所属板块" v-model="searchParam.template" filterable class="ml20">
           <el-option v-for='item in topData.bankuai' :key="item.Value" :label="item.Text" :value="item.Value"></el-option>
@@ -37,7 +38,7 @@
       </el-table-column>
       <el-table-column prop="Company_ReplyName" label="公司回复" min-width="200" fit show-overflow-tooltip>
         <template slot-scope="scope">
-          <div v-for="(item,key) in scope.row.Reply" :key="key"  style="color: #0d308c; cursor: pointer;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;  " @click="showPDF(item.ReplyUrl)">
+          <div v-for="(item,key) in scope.row.Reply" :key="key"  style="color: #0d308c; cursor: pointer;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;  " @click="showWord(item.ReplyUrl)">
             {{ item.ReplyName }}
           </div>
         </template>
@@ -45,7 +46,7 @@
       <el-table-column prop="Company_Code" label="证券代码" width="150"></el-table-column>
       <el-table-column prop="Company_Name" label="证券简称" width="150"></el-table-column>
       <el-table-column prop="Letter_TypeValue" label="问询类型" width="150"></el-table-column>
-      <el-table-column prop="SendDate" width="150" label="发函日期"></el-table-column>
+      <el-table-column width="150" :formatter="dealDateFormate" label="发函日期"></el-table-column>
     </el-table>
     <!-- 表格数据结束 -->
 
@@ -130,6 +131,11 @@ export default {
       this.searchParam.stock_code = []
       this.getList()
     },
+    dealDateFormate (row) {
+      let date = row.SendDate
+      let dates = date.split(' ')[0]
+      return dates
+    },
     getList () {
       var that = this
       if (this.searchParam.processDateStart || this.searchParam.processDateEnd) {
@@ -196,7 +202,7 @@ export default {
           that.topData.bankuai = data
         })
 
-      that.$ajax.get(that.apiPath + 'Regulatory_Letters_Company')
+      that.$ajax.get(that.apiPath + 'StockInfo')
         .then(function (response) {
           var data = response.data.Result.Data
           that.topData.companyCode = data
