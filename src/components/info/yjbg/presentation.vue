@@ -23,7 +23,7 @@
       </el-select>
     </el-container>
     <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
-      <div class="ml20">
+      <div class="ml20 noMl">
         <el-button type="primary" icon="el-icon-search" size="small" @click="getList">搜索</el-button>
         <el-button type="warning" size="small" @click="clearParam">清空搜索</el-button>
       </div>
