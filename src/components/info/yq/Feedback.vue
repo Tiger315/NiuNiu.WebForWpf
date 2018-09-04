@@ -144,7 +144,7 @@ export default {
           return
         }
         if (!this.searchParam.processDateEnd) {
-          this.$message.error('请选择开始日期！')
+          this.$message.error('请选择结束日期！')
           return
         }
       }
