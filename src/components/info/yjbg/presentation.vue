@@ -16,11 +16,14 @@
       <el-input placeholder="研报作者" v-model="searchParam.author" size="small" clearable class="ml20"></el-input>
     </el-container>
     <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
-      <el-date-picker type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" class="ml20 noMl"></el-date-picker>
+      <el-date-picker v-model="searchParam.processDateStart" type="date" placeholder="开始日期" class="ml20 noMl"></el-date-picker>
+            <el-date-picker v-model="searchParam.processDateEnd" type="date" placeholder="结束日期" class="ml20"></el-date-picker>
       <el-select collapse-tags clearable size="small" v-model="searchParam.rate" placeholder="所有评级" filterable class="ml20">
         <el-option v-for='item in topData.rate' :key="item" :label="item" :value="item"></el-option>
       </el-select>
-      <div class="ml20">
+    </el-container>
+    <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
+      <div class="ml20 noMl">
         <el-button type="primary" icon="el-icon-search" size="small" @click="getList">搜索</el-button>
         <el-button type="warning" size="small" @click="clearParam">清空搜索</el-button>
       </div>
@@ -341,6 +344,16 @@ export default {
       this.dialog = false
     },
     getList () {
+      if (this.searchParam.processDateStart || this.searchParam.processDateEnd) {
+        if (!this.searchParam.processDateStart) {
+          this.$message.error('请选择开始日期！')
+          return
+        }
+        if (!this.searchParam.processDateEnd) {
+          this.$message.error('请选择结束日期！')
+          return
+        }
+      }
       this.loadingData.loading = true
       let that = this
       that.getSearchParam()
@@ -365,8 +378,8 @@ export default {
     getSearchParam () {
       // 获取查询的参数
       // 处理开始结束时间
-      this.searchParam.processDateStart = this.searchParam.time && this.dealDate(this.searchParam.time[0]) // 开始时间
-      this.searchParam.processDateEnd = this.searchParam.time && this.dealDate(this.searchParam.time[1]) // 结束时间
+      this.searchParam.processDateStart = this.searchParam.processDateStart && this.dealDate(this.searchParam.processDateStart) // 开始时间
+      this.searchParam.processDateEnd = this.searchParam.processDateEnd && this.dealDate(this.searchParam.processDateEnd) // 结束时间
       // 处理公司代码
       if (this.searchParam && this.searchParam.stock_code) {
         this.searchParam.stock_code.length > 1 ? this.searchParam.spliteStockCode = this.searchParam.stock_code.join(',') : this.searchParam.spliteStockCode = this.searchParam.stock_code[0]
@@ -419,7 +432,7 @@ export default {
 }
 .ml20 {
   margin-left: 20px;
-  width: 400px !important;
+  width: 33.3% !important;
 }
 .Presentation .el-dialog {
   background-color: rgba(0, 0, 0, 0.3);

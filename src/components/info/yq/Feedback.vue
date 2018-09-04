@@ -8,7 +8,8 @@
     </el-container>
     <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
         <el-select multiple collapse-tags clearable size="small" v-model="searchParam.stock_code" placeholder="公司代码、简称、拼音" filterable class="ml20 noMl">
-          <el-option v-for='item in topData.companyCode' :key="item.Company_Name+'('+item.Company_Code+')'" :label="item.Company_Name+'('+item.Company_Code+')'" :value="item.Company_Code"></el-option>
+          <el-option :label="item.Name+'('+item.Code+')'" :key="item.Name+'('+item.Code+')'" v-for='item in topData.companyCode' :value="item.Code"></el-option>
+          <!-- <el-option v-for='item in topData.companyCode' :key="item.Company_Name+'('+item.Company_Code+')'" :label="item.Company_Name+'('+item.Company_Code+')'" :value="item.Company_Code"></el-option> -->
         </el-select>
         <el-select collapse-tags clearable size="small" placeholder="所属板块" v-model="searchParam.template" filterable class="ml20">
           <el-option v-for='item in topData.bankuai' :key="item.Value" :label="item.Text" :value="item.Value"></el-option>
@@ -18,12 +19,12 @@
         </el-select>
      </el-container>
     <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
-      <el-date-picker  type="daterange" v-model="searchParam.time" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" class="ml20 noMl"></el-date-picker>
+      <el-date-picker v-model="searchParam.processDateStart" type="date" placeholder="开始日期" class="ml20 noMl"></el-date-picker>
+      <el-date-picker v-model="searchParam.processDateEnd" type="date" placeholder="结束日期" class="ml20"></el-date-picker>
       <div class="ml20">
         <el-button type="primary" icon="el-icon-search" size="small" @click="getList">搜索</el-button>
         <el-button type="warning" size="small" @click="clearParam">清空搜索</el-button>
       </div>
-      <div  class="ml20"></div>
     </el-container>
     <!-- 搜索条件结束 -->
 
@@ -37,7 +38,7 @@
       </el-table-column>
       <el-table-column prop="Company_ReplyName" label="公司回复" min-width="200" fit show-overflow-tooltip>
         <template slot-scope="scope">
-          <div v-for="(item,key) in scope.row.Reply" :key="key"  style="color: #0d308c; cursor: pointer;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;  " @click="showPDF(item.ReplyUrl)">
+          <div v-for="(item,key) in scope.row.Reply" :key="key"  style="color: #0d308c; cursor: pointer;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;  " @click="showWord(item.ReplyUrl)">
             {{ item.ReplyName }}
           </div>
         </template>
@@ -45,7 +46,7 @@
       <el-table-column prop="Company_Code" label="证券代码" width="150"></el-table-column>
       <el-table-column prop="Company_Name" label="证券简称" width="150"></el-table-column>
       <el-table-column prop="Letter_TypeValue" label="问询类型" width="150"></el-table-column>
-      <el-table-column prop="SendDate" width="150" label="发函日期"></el-table-column>
+      <el-table-column width="150" :formatter="dealDateFormate" label="发函日期"></el-table-column>
     </el-table>
     <!-- 表格数据结束 -->
 
@@ -130,11 +131,26 @@ export default {
       this.searchParam.stock_code = []
       this.getList()
     },
+    dealDateFormate (row) {
+      let date = row.SendDate
+      let dates = date.split(' ')[0]
+      return dates
+    },
     getList () {
-      this.loadingData.loading = true
       var that = this
-      var apiPath = ''
+      if (this.searchParam.processDateStart || this.searchParam.processDateEnd) {
+        if (!this.searchParam.processDateStart) {
+          this.$message.error('请选择开始日期！')
+          return
+        }
+        if (!this.searchParam.processDateEnd) {
+          this.$message.error('请选择结束日期！')
+          return
+        }
+      }
       that.getSearchParam()
+      that.loadingData.loading = true
+      var apiPath = ''
       apiPath = that.apiPath + 'Regulatory_Letters/Pager/' + (this.searchParam.titleMust || '[]') + '/' + (this.searchParam.titleCan || '[]') + '/' + (this.searchParam.titleNot || '[]') + '/' + (this.searchParam.spliteStockCode || '[]') + '/' + (this.searchParam.send_unit || '[]') + '/' + (this.searchParam.reply_status || 0) + '/' + (this.searchParam.template || '[]') + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax.get(apiPath)
         .then(function (response) {
@@ -147,8 +163,8 @@ export default {
     getSearchParam () {
       // 获取查询的参数
       // 处理开始结束时间
-      this.searchParam.processDateStart = this.searchParam.time && this.dealDate(this.searchParam.time[0]) // 开始时间
-      this.searchParam.processDateEnd = this.searchParam.time && this.dealDate(this.searchParam.time[1]) // 结束时间
+      this.searchParam.processDateStart = this.searchParam.processDateStart && this.dealDate(this.searchParam.processDateStart) // 开始时间
+      this.searchParam.processDateEnd = this.searchParam.processDateEnd && this.dealDate(this.searchParam.processDateEnd) // 结束时间
       // 处理公司代码
       if (this.searchParam && this.searchParam.stock_code) {
         this.searchParam.stock_code.length > 1 ? this.searchParam.spliteStockCode = this.searchParam.stock_code.join(',') : this.searchParam.spliteStockCode = this.searchParam.stock_code[0]
@@ -186,7 +202,7 @@ export default {
           that.topData.bankuai = data
         })
 
-      that.$ajax.get(that.apiPath + 'Regulatory_Letters_Company')
+      that.$ajax.get(that.apiPath + 'StockInfo')
         .then(function (response) {
           var data = response.data.Result.Data
           that.topData.companyCode = data
@@ -281,6 +297,14 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+.el-container > div:first-child{
+  margin-left:0px;
+}
+.el-container > div {
+  width: 33.3%;
+  margin: 0 15px 0 0;
+  box-sizing: border-box;
 }
 #pop canvas {
   width: 100%;
