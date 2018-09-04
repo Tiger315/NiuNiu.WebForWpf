@@ -131,10 +131,20 @@ export default {
       this.getList()
     },
     getList () {
-      this.loadingData.loading = true
       var that = this
-      var apiPath = ''
+      if (this.searchParam.processDateStart || this.searchParam.processDateEnd) {
+        if (!this.searchParam.processDateStart) {
+          this.$message.error('请选择开始日期！')
+          return
+        }
+        if (!this.searchParam.processDateEnd) {
+          this.$message.error('请选择开始日期！')
+          return
+        }
+      }
       that.getSearchParam()
+      that.loadingData.loading = true
+      var apiPath = ''
       apiPath = that.apiPath + 'Regulatory_Letters/Pager/' + (this.searchParam.titleMust || '[]') + '/' + (this.searchParam.titleCan || '[]') + '/' + (this.searchParam.titleNot || '[]') + '/' + (this.searchParam.spliteStockCode || '[]') + '/' + (this.searchParam.send_unit || '[]') + '/' + (this.searchParam.reply_status || 0) + '/' + (this.searchParam.template || '[]') + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax.get(apiPath)
         .then(function (response) {

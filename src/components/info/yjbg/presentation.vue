@@ -165,6 +165,16 @@ export default {
       this.dialog = false
     },
     getList () {
+      if (this.searchParam.processDateStart || this.searchParam.processDateEnd) {
+        if (!this.searchParam.processDateStart) {
+          this.$message.error('请选择开始日期！')
+          return
+        }
+        if (!this.searchParam.processDateEnd) {
+          this.$message.error('请选择开始日期！')
+          return
+        }
+      }
       this.loadingData.loading = true
       let that = this
       that.getSearchParam()

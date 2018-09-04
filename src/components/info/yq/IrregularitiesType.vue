@@ -251,6 +251,16 @@ export default {
       } else {
         this.titleActive = false
       }
+      if (this.searchParam.processDateStart || this.searchParam.processDateEnd) {
+        if (!this.searchParam.processDateStart) {
+          this.$message.error('请选择开始日期！')
+          return
+        }
+        if (!this.searchParam.processDateEnd) {
+          this.$message.error('请选择结束日期！')
+          return
+        }
+      }
       this.loadingData.loading = true
       var that = this
       that.getSearchParam()

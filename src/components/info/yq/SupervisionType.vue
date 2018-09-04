@@ -92,6 +92,16 @@ export default {
         })
     },
     loadTableDetail () {
+      if (this.searchParam.processDateStart || this.searchParam.processDateEnd) {
+        if (!this.searchParam.processDateStart) {
+          this.$message.error('请选择开始日期！')
+          return
+        }
+        if (!this.searchParam.processDateEnd) {
+          this.$message.error('请选择结束日期！')
+          return
+        }
+      }
       var that = this
       var api = that.apiPath + 'DynamicNews/Pager'
       this.getSearchParam()
