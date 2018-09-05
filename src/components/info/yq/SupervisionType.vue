@@ -102,6 +102,10 @@ export default {
           this.$message.error('请选择结束日期！')
           return
         }
+        if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
+          this.$message.error('开始时间不能大于结束时间！')
+          return
+        }
       }
       var that = this
       var api = that.apiPath + 'DynamicNews/Pager'
