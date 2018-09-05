@@ -76,6 +76,7 @@ export default {
       return index + (this.zPager.currentPage - 1) * this.zPager.size + 1
     },
     clearParam () {
+      this.zPager.currentPage = 1
       for (var key in this.searchParam) {
         this.searchParam[key] = ''
       }
