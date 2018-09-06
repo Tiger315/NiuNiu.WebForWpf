@@ -49,7 +49,7 @@
           <div>{{scope.row.Author == "" ? "--" : scope.row.Author}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="ReportTime" label="发布日期" width="150"></el-table-column>
+      <el-table-column :formatter="dealDateFormate" label="发布日期" width="150"></el-table-column>
     </el-table>
     <!-- 表格数据结束 -->
 
@@ -327,6 +327,11 @@ export default {
       this.searchParam.stock_code = []
       this.getList()
     },
+    dealDateFormate (row) {
+      let date = row.ReportTime
+      let dates = date.split(' ')[0]
+      return dates
+    },
     showPDF (urls) { // 展示pdf
       this.urlData.pdfUrl = urls
       var Idx = urls.indexOf('pdf')
@@ -345,15 +350,15 @@ export default {
       this.dialog = false
     },
     getList () {
-      if (this.searchParam.processDateStart || this.searchParam.processDateEnd) {
-        if (!this.searchParam.processDateStart) {
-          this.$message.error('请选择开始日期！')
-          return
-        }
-        if (!this.searchParam.processDateEnd) {
-          this.$message.error('请选择结束日期！')
-          return
-        }
+      if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
+        // if (!this.searchParam.processDateStart) {
+        //   this.$message.error('请选择开始日期！')
+        //   return
+        // }
+        // if (!this.searchParam.processDateEnd) {
+        //   this.$message.error('请选择结束日期！')
+        //   return
+        // }
         if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
           this.$message.error('开始时间不能大于结束时间！')
           return

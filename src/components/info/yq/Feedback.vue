@@ -139,15 +139,15 @@ export default {
     },
     getList () {
       var that = this
-      if (this.searchParam.processDateStart || this.searchParam.processDateEnd) {
-        if (!this.searchParam.processDateStart) {
-          this.$message.error('请选择开始日期！')
-          return
-        }
-        if (!this.searchParam.processDateEnd) {
-          this.$message.error('请选择结束日期！')
-          return
-        }
+      if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
+        // if (!this.searchParam.processDateStart) {
+        //   this.$message.error('请选择开始日期！')
+        //   return
+        // }
+        // if (!this.searchParam.processDateEnd) {
+        //   this.$message.error('请选择结束日期！')
+        //   return
+        // }
         if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
           this.$message.error('开始时间不能大于结束时间！')
           return
