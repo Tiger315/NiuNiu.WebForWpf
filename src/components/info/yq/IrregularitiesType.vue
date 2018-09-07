@@ -150,8 +150,6 @@
   </div>
 </template>
 <script>
-import pdf from 'vue-pdf'
-var loadingTask = pdf.createLoadingTask('https://cdn.mozilla.net/pdfjs/tracemonkey.pdf')
 export default {
   name: 'IrregularitiesType',
   data () {
@@ -164,7 +162,6 @@ export default {
       tableData: [],
       treeData: [],
       msgId: '',
-      pdfUrl: loadingTask,
       numPages: undefined,
       titleActive: true, // 左侧标题是否为选中状态
       searchParam: {
@@ -218,9 +215,6 @@ export default {
       }
     }
   },
-  components: {
-    pdf
-  },
   methods: {
     typeIndex (index) {
       return index + (this.searchParam.currentPage - 1) * this.searchParam.size + 1
@@ -253,14 +247,6 @@ export default {
         this.titleActive = false
       }
       if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
-        // if (!this.searchParam.processDateStart) {
-        //   this.$message.error('请选择开始日期！')
-        //   return
-        // }
-        // if (!this.searchParam.processDateEnd) {
-        //   this.$message.error('请选择结束日期！')
-        //   return
-        // }
         if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
           this.$message.error('开始时间不能大于结束时间！')
           return
@@ -418,11 +404,6 @@ export default {
         that.leftHeight = document.documentElement.clientHeight - 35
       })()
     }
-    if (this.pdfUrl) {
-      this.pdfUrl.then(pdf => {
-        this.numPages = pdf.numPages
-      })
-    }
   }
 }
 </script>
@@ -503,8 +484,8 @@ width:180px;
   height:4px;
   border-radius:4px;
   margin-right:5px;
-  background-color: rgba(0, 0, 0, 0.55);
   vertical-align:middle;
+  background-color: rgba(0, 0, 0, 0.55);
 }
 .caseDetail:hover{
   background-color: #f6f6f6;
