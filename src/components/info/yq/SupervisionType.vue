@@ -48,7 +48,7 @@ export default {
   name: 'SupervisionType',
   data () {
     return {
-      dataHeight: document.documentElement.clientHeight - 135,
+      dataHeight: document.documentElement.clientHeight - 177,
       dialog: true,
       loading: true,
       searchParam: {
@@ -148,7 +148,7 @@ export default {
     const that = this
     window.onresize = () => {
       return (() => {
-        that.dataHeight = document.documentElement.clientHeight - 135
+        that.dataHeight = document.documentElement.clientHeight - 177
       })()
     }
   }

@@ -76,7 +76,7 @@ export default {
   name: 'Presentation',
   data () {
     return {
-      dataHeight: document.documentElement.clientHeight - 177,
+      dataHeight: document.documentElement.clientHeight - 219,
       loadingData: {
         loading: false
       },
@@ -423,7 +423,7 @@ export default {
     let that = this
     window.onresize = () => {
       return (() => {
-        that.dataHeight = document.documentElement.clientHeight - 177
+        that.dataHeight = document.documentElement.clientHeight - 219
       })()
     }
   }
