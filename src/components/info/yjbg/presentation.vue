@@ -79,7 +79,7 @@ export default {
   name: 'Presentation',
   data () {
     return {
-      dataHeight: document.documentElement.clientHeight - 219,
+      dataHeight: document.documentElement.clientHeight - 177,
       loadingData: {
         loading: false
       },
@@ -893,7 +893,7 @@ export default {
     let that = this
     window.onresize = () => {
       return (() => {
-        that.dataHeight = document.documentElement.clientHeight - 219
+        that.dataHeight = document.documentElement.clientHeight - 177
       })()
     }
   }
@@ -912,7 +912,7 @@ export default {
 }
 .ml20 {
   margin-left: 20px;
-  width: 25% !important;
+  width: 24% !important;
 }
 .Presentation .el-dialog {
   background-color: rgba(0, 0, 0, 0.3);
