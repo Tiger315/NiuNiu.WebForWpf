@@ -69,8 +69,6 @@
   </div>
 </template>
 <script>
-import pdf from 'vue-pdf'
-// var loadingTask = pdf.createLoadingTask('https://cdn.mozilla.net/pdfjs/tracemonkey.pdf')
 export default {
   name: 'Feedback',
   data () {
@@ -113,9 +111,6 @@ export default {
       }
     }
   },
-  components: {
-    pdf
-  },
   methods: {
     closeModel () {
       this.loadingData.loading = false
@@ -140,14 +135,6 @@ export default {
     getList () {
       var that = this
       if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
-        // if (!this.searchParam.processDateStart) {
-        //   this.$message.error('请选择开始日期！')
-        //   return
-        // }
-        // if (!this.searchParam.processDateEnd) {
-        //   this.$message.error('请选择结束日期！')
-        //   return
-        // }
         if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
           this.$message.error('开始时间不能大于结束时间！')
           return
@@ -227,11 +214,6 @@ export default {
       return (() => {
         that.dataHeight = document.documentElement.clientHeight - 177
       })()
-    }
-    if (this.urlData.pdfUrl) {
-      this.urlData.pdfUrl.then(pdf => {
-        this.urlData.numPages = pdf.urlData.numPages
-      })
     }
   }
 

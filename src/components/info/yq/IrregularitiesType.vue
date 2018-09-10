@@ -114,17 +114,18 @@
               <div class="detail-card">
                 <div class="card-head">相关案例</div>
                 <div class="card-body" v-loading="loadingData.relaCaseLoading">
-                  <p v-for="val in detailData.relationCaseData" :key="val.id" @click="getDetail (val.relationXgal_id)">{{val.title}}</p>
+                  <p v-for="val in detailData.relationCaseData" class="caseDetail" :key="val.id" @click="getDetail (val.relationXgal_id)">
+                    <span class="splot"></span>{{val.title}}</p>
                 </div>
               </div>
             </div>
             <div>
-              <div class="detail-card" :v-if="detailData.xgfgLawData">
+              <!-- <div class="detail-card" :v-if="detailData.xgfgLawData">
                 <div class="card-head">相关法规</div>
                 <div class="card-body" v-loading="loadingData.xgfgLawLoading">
                   <p v-for="val in detailData.xgfgLawData" :key="val.id" @click="getDetail (val.relationXgfg_id)">{{val.title}}</p>
                 </div>
-              </div>
+              </div> -->
             </div>
           </el-aside>
           <el-container>
@@ -149,8 +150,6 @@
   </div>
 </template>
 <script>
-import pdf from 'vue-pdf'
-var loadingTask = pdf.createLoadingTask('https://cdn.mozilla.net/pdfjs/tracemonkey.pdf')
 export default {
   name: 'IrregularitiesType',
   data () {
@@ -163,7 +162,6 @@ export default {
       tableData: [],
       treeData: [],
       msgId: '',
-      pdfUrl: loadingTask,
       numPages: undefined,
       titleActive: true, // 左侧标题是否为选中状态
       searchParam: {
@@ -202,7 +200,7 @@ export default {
       detailData: {
         baseInfoData: {}, // 基本信息
         relationCaseData: [], // 相关案例
-        xgfgLawData: [], // 相关法规
+        // xgfgLawData: [], // 相关法规
         violationCaseData: [], // 违规案例
         tableData: []
       },
@@ -216,9 +214,6 @@ export default {
         violatioLoading: false// 违规案例loading
       }
     }
-  },
-  components: {
-    pdf
   },
   methods: {
     typeIndex (index) {
@@ -252,14 +247,6 @@ export default {
         this.titleActive = false
       }
       if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
-        // if (!this.searchParam.processDateStart) {
-        //   this.$message.error('请选择开始日期！')
-        //   return
-        // }
-        // if (!this.searchParam.processDateEnd) {
-        //   this.$message.error('请选择结束日期！')
-        //   return
-        // }
         if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
           this.$message.error('开始时间不能大于结束时间！')
           return
@@ -381,7 +368,7 @@ export default {
       that.$ajax
         .get(that.apiPath + '/XA_Wgal_RelationXgfg?xa_id=' + row)
         .then(function (response) {
-          that.detailData.xgfgLawData = response.data.Result.Data
+          // that.detailData.xgfgLawData = response.data.Result.Data
           that.loadingData.xgfgLawLoading = false
         })
       // 涉及当事人
@@ -400,7 +387,7 @@ export default {
       this.dialog = false
       this.detailData.baseInfoData = {}// 清除基本信息
       this.detailData.relationCaseData = []// 清除相关案例
-      this.detailData.xgfgLawData = []// 清除相关法规
+      // this.detailData.xgfgLawData = []// 清除相关法规
       this.detailData.tableData = []
     }
   },
@@ -416,11 +403,6 @@ export default {
         that.tableHeight = document.documentElement.clientHeight - 232
         that.leftHeight = document.documentElement.clientHeight - 35
       })()
-    }
-    if (this.pdfUrl) {
-      this.pdfUrl.then(pdf => {
-        this.numPages = pdf.numPages
-      })
     }
   }
 }
@@ -496,6 +478,18 @@ width:180px;
 </style>
 
 <style scoped>
+.splot{
+  display: inline-block;
+  width:4px;
+  height:4px;
+  border-radius:4px;
+  margin-right:5px;
+  vertical-align:middle;
+  background-color: rgba(0, 0, 0, 0.55);
+}
+.caseDetail:hover{
+  background-color: #f6f6f6;
+}
 .SupervisionType {
   width: 100%;
   padding: 0px;
