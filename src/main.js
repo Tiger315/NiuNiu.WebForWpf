@@ -10,7 +10,8 @@ import '../static/common.js'
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
-Vue.prototype.apiPath = 'http://api.niuniu.com/api/v1/'
+// Vue.prototype.apiPath = 'http://api.niuniu.com/api/v1/'
+Vue.prototype.apiPath = 'http://192.168.0.120:3016/api/v1/'
 Vue.prototype.$ajax = axios
 /* eslint-disable no-new */
 new Vue({

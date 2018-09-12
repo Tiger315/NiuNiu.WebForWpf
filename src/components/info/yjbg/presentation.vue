@@ -5,7 +5,7 @@
       <el-input placeholder="包含所有关键词(以空格区分)" v-model="searchParam.titleMust" size="small" clearable class="ml20 noMl"></el-input>
       <el-input placeholder="包含任意关键词(以空格区分)" v-model="searchParam.titleCan" size="small" clearable class="ml20"></el-input>
       <el-input placeholder="不包含任意关键词(以空格区分)" v-model="searchParam.titleNot" size="small" clearable class="ml20"></el-input>
-      <el-select multiple collapse-tags clearable size="small" v-model="searchParam.stock_code" placeholder="公司代码、简称、拼音" filterable class="ml20">
+      <el-select multiple collapse-tags clearable size="small" v-model="searchParam.stock_code" placeholder="公司代码、简称" filterable class="ml20">
         <el-option :label="item.Name+'('+item.Code+')'" :key="item.Name+'('+item.Code+')'" v-for='item in topData.companyCode' :value="item.Code"></el-option>
       </el-select>
     </el-container>
@@ -24,35 +24,29 @@
       <el-button type="primary" icon="el-icon-search" size="small" style="margin-left: 20px;" @click="getList">搜索</el-button>
       <el-button type="warning" size="small" style="margin-left: 20px;" @click="clearParam">清空搜索</el-button>
     </el-container>
-
-    <!-- <el-container style="margin-bottom:10px;padding:0 20% 0 0;">
-      <div class="ml20 noMl">
-        <el-button type="primary" icon="el-icon-search" size="small" @click="getList">搜索</el-button>
-        <el-button type="warning" size="small" @click="clearParam">清空搜索</el-button>
-      </div>
-    </el-container> -->
     <!-- 搜索条件结束 -->
 
     <!-- 表格数据开始 -->
     <el-table v-loading.loading="loadingData.loading" element-loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
       <el-table-column type="index" fixed="left" label="序号" width="70" :index="typeIndex">序号</el-table-column>
-      <el-table-column fixed="left" prop="Title" label="研报标题" min-width="200" fit show-overflow-tooltip>
+      <el-table-column fixed="left" prop="Title" label="研报标题" min-width="350" fit show-overflow-tooltip>
         <template slot-scope="scope">
-          <span style="color: #0d308c; cursor: pointer; font" @click='showPDF(scope.row.FileUrl)'>{{scope.row.StockName ? ("【 "+scope.row.StockName+" 】" + scope.row.Title) : scope.row.Title}}</span>
+          <span style="color: #0d308c; cursor: pointer; font" @click='showPDF(scope.row.Atturl)'>{{scope.row.CodeName ? ("【 "+ scope.row.CodeName +" 】" + scope.row.Title) : scope.row.Title}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="Rate" label="股票评级" min-width="60" fit>
+      <el-table-column prop="Type" label="发布日期" width="120"></el-table-column>
+      <el-table-column prop="Rate" label="股票评级" min-width="100">
         <template slot-scope="scope">
           <div>{{scope.row.Rate == "" ? "--" : scope.row.Rate}}</div>
         </template>
       </el-table-column>
       <el-table-column prop="Org" label="研究机构" width="160"></el-table-column>
-      <el-table-column prop="Author" label="研报作者" width="150">
+      <el-table-column prop="Auth" label="研报作者" width="160" show-overflow-tooltip>
         <template slot-scope="scope">
-          <div>{{scope.row.Author == "" ? "--" : scope.row.Author}}</div>
+          <div>{{scope.row.Auth == "" ? "--" : scope.row.Auth}}</div>
         </template>
       </el-table-column>
-      <el-table-column :formatter="dealDateFormate" label="发布日期" width="150"></el-table-column>
+      <el-table-column prop="ReportDate" label="发布日期" width="150"></el-table-column>
     </el-table>
     <!-- 表格数据结束 -->
 
@@ -85,17 +79,16 @@ export default {
       },
       dialog: false,
       searchParam: {
-        time: '',
-        titleMust: '', // 必含关键词
-        titleCan: '', // 可含关键词
-        titleNot: '', // 不含关键词
-        stock_code: [], // 公司代码
-        spliteStockCode: '',
-        yjjg: '', // 研究机构
-        author: '', // 研报作者
-        rate: '',
-        processDateStart: '', // 起始时间
-        processDateEnd: '' // 结束时间
+        titleMust: '',
+        titleCan: '',
+        titleNot: '',
+        stock_code: [],
+        spliteStockCode: ''
+        // yjjg: '', // 研究机构
+        // author: '', // 研报作者
+        // rate: '',
+        // processDateStart: '', // 起始时间
+        // processDateEnd: '' // 结束时间
       },
       urlData: {
         'pdfUrl': '',
@@ -789,7 +782,7 @@ export default {
           '紫金矿业'
         ],
         companyCode: [],
-        rate: ['增持', '买入', '卖出', '持有']
+        rate: ['持有', '回避', '减持', '买入', '卖出', '增持', '中性']
       },
       tableData: [],
       zPager: {
@@ -835,37 +828,52 @@ export default {
       this.dialog = false
     },
     getList () {
-      if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
-        if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
-          this.$message.error('开始时间不能大于结束时间！')
-          return
-        }
-      }
-      this.loadingData.loading = true
+      // if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
+      //   if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
+      //     this.$message.error('开始时间不能大于结束时间！')
+      //     return
+      //   }
+      // }
+
       let that = this
+      that.loadingData.loading = true
       that.getSearchParam()
-      let apiPath = ''
-      let titleMust = (this.searchParam.titleMust && encodeURI(this.searchParam.titleMust)) || '[]'// 包含所有关键字
-      let titleCan = (this.searchParam.titleCan && encodeURI(this.searchParam.titleCan)) || '[]'// 可以包含关键字
-      let titleNot = (this.searchParam.titleNot && encodeURI(this.searchParam.titleNot)) || '[]' // 不包含任意关键字
-      let stockCode = this.searchParam.spliteStockCode || '[]' // 公司代码
-      let yjjg = (this.searchParam.yjjg && encodeURI(this.searchParam.yjjg)) || '[]' // 研究机构
-      let author = (this.searchParam.author && encodeURI(this.searchParam.author)) || '[]' // 研报作者
-      let rate = (this.searchParam.rate && encodeURI(this.searchParam.rate)) || '[]' // 研报作者
-      apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + yjjg + '/' + author + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + rate + '/' + this.zPager.currentPage + '/' + this.zPager.size
+
+      // 包含所有关键字
+      let titleMust = (that.searchParam.titleMust && encodeURI(that.searchParam.titleMust)) || '[]'
+
+      // 可以包含关键字
+      let titleCan = (that.searchParam.titleCan && encodeURI(that.searchParam.titleCan)) || '[]'
+
+      // 不包含任意关键字
+      let titleNot = (that.searchParam.titleNot && encodeURI(that.searchParam.titleNot)) || '[]'
+
+      // 公司代码
+      let stockCode = this.searchParam.spliteStockCode || '[]'
+      var apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + this.zPager.currentPage + '/' + this.zPager.size
+
+      // let stockCode = this.searchParam.spliteStockCode || '[]' // 公司代码
+      // let yjjg = (this.searchParam.yjjg && encodeURI(this.searchParam.yjjg)) || '[]' // 研究机构
+      // let author = (this.searchParam.author && encodeURI(this.searchParam.author)) || '[]' // 研报作者
+      // let rate = (this.searchParam.rate && encodeURI(this.searchParam.rate)) || '[]' // 研报作者
+      // apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + yjjg + '/' + author + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + rate + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax.get(apiPath)
-        .then(function (response) {
+        .then(res => {
+          var r = res.data
+          if (r.Code === 1000) {
+            that.tableData = r.Result.Data
+            that.zPager.total = r.Result.Total
+          }
           that.loadingData.loading = false
-          let data = response.data.Result
-          that.tableData = data.Data
-          that.zPager.total = data.Total
         })
     },
     getSearchParam () {
-      // 获取查询的参数
-      // 处理开始结束时间
-      this.searchParam.processDateStart = this.searchParam.processDateStart && this.dealDate(this.searchParam.processDateStart) // 开始时间
-      this.searchParam.processDateEnd = this.searchParam.processDateEnd && this.dealDate(this.searchParam.processDateEnd) // 结束时间
+      // 开始时间
+      this.searchParam.processDateStart = this.searchParam.processDateStart && this.dealDate(this.searchParam.processDateStart)
+
+      // 结束时间
+      this.searchParam.processDateEnd = this.searchParam.processDateEnd && this.dealDate(this.searchParam.processDateEnd)
+
       // 处理公司代码
       if (this.searchParam && this.searchParam.stock_code) {
         this.searchParam.stock_code.length > 1 ? this.searchParam.spliteStockCode = this.searchParam.stock_code.join(',') : this.searchParam.spliteStockCode = this.searchParam.stock_code[0]
@@ -912,7 +920,7 @@ export default {
 }
 .ml20 {
   margin-left: 20px;
-  width: 25% !important;
+  width: 24% !important;
 }
 .Presentation .el-dialog {
   background-color: rgba(0, 0, 0, 0.3);
