@@ -874,7 +874,7 @@ export default {
       // 结束时间
       this.searchParam.processDateEnd = this.searchParam.processDateEnd && this.dealDate(this.searchParam.processDateEnd)
       // 处理公司代码
-      if (this.searchParam && this.searchParam.stock_code) {
+      if (this.searchParam && this.searchParam.stock_code.length > 0) {
         if (this.searchParam.stock_code.length > 1) {
           this.searchParam.spliteStockCode = "'" + this.searchParam.stock_code.join("','") + "'"
         } else {
