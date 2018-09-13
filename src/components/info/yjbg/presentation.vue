@@ -83,12 +83,13 @@ export default {
         titleCan: '',
         titleNot: '',
         stock_code: [],
-        spliteStockCode: ''
-        // yjjg: '', // 研究机构
+        spliteStockCode: '',
+        yjjg: '',
+        rate: '',
+        processDateStart: '',
+        processDateEnd: ''
         // author: '', // 研报作者
-        // rate: '',
-        // processDateStart: '', // 起始时间
-        // processDateEnd: '' // 结束时间
+
       },
       urlData: {
         'pdfUrl': '',
@@ -828,12 +829,12 @@ export default {
       this.dialog = false
     },
     getList () {
-      // if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
-      //   if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
-      //     this.$message.error('开始时间不能大于结束时间！')
-      //     return
-      //   }
-      // }
+      if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
+        if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
+          this.$message.error('开始时间不能大于结束时间！')
+          return
+        }
+      }
 
       let that = this
       that.loadingData.loading = true
@@ -851,7 +852,7 @@ export default {
       let yjjg = (this.searchParam.yjjg && encodeURI(this.searchParam.yjjg)) || '[]'
       // 评级
       let rate = (this.searchParam.rate && encodeURI(this.searchParam.rate)) || '[]'
-      var apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + yjjg + '/' + rate + '/' + this.zPager.currentPage + '/' + this.zPager.size
+      var apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + yjjg + '/' + rate + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax.get(apiPath)
         .then(res => {
           var r = res.data
