@@ -87,9 +87,8 @@ export default {
         yjjg: '',
         rate: '',
         processDateStart: '',
-        processDateEnd: ''
-        // author: '', // 研报作者
-
+        processDateEnd: '',
+        author: ''
       },
       urlData: {
         'pdfUrl': '',
@@ -852,7 +851,9 @@ export default {
       let yjjg = (this.searchParam.yjjg && encodeURI(this.searchParam.yjjg)) || '[]'
       // 评级
       let rate = (this.searchParam.rate && encodeURI(this.searchParam.rate)) || '[]'
-      var apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + yjjg + '/' + rate + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + this.zPager.currentPage + '/' + this.zPager.size
+      // 研报作者
+      let author = (this.searchParam.author && encodeURI(this.searchParam.author)) || '[]'
+      var apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + yjjg + '/' + rate + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + author + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax.get(apiPath)
         .then(res => {
           var r = res.data
