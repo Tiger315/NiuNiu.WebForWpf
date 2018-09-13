@@ -810,19 +810,21 @@ export default {
       let dates = date.split(' ')[0]
       return dates
     },
-    showPDF (urls) { // 展示pdf
+    showPDF (urls) {
       this.urlData.pdfUrl = urls
       var Idx = urls.indexOf('pdf')
-      if (Idx === -1) { // 判断如果不是pdf文件，调用word
+
+      // 判断如果不是pdf文件，调用word
+      if (Idx === -1) {
         this.showWord(urls)
       }
       this.dialog = true
     },
-    showWord (urls) { // 展示word
+    showWord (urls) {
       this.urlData.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
       this.dialog = true
     },
-    beforeClose () { // 弹窗关闭之前清除数据
+    beforeClose () {
       this.urlData.pdfUrl = ''
       this.urlData.showWordUrl = ''
       this.dialog = false
