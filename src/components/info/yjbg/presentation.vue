@@ -876,6 +876,10 @@ export default {
 
       // 处理公司代码
       if (this.searchParam && this.searchParam.stock_code) {
+        for (var i = 0; i < this.searchParam.stock_code.length; i++) {
+          this.searchParam.stock_code[i] = "'" + this.searchParam.stock_code[i] + "'"
+        }
+
         this.searchParam.stock_code.length > 1 ? this.searchParam.spliteStockCode = this.searchParam.stock_code.join(',') : this.searchParam.spliteStockCode = this.searchParam.stock_code[0]
       } else {
         this.searchParam.spliteStockCode = ''
