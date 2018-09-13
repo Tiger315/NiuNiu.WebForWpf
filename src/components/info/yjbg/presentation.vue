@@ -13,7 +13,7 @@
       <el-select collapse-tags clearable size="small" placeholder="研究机构" v-model="searchParam.yjjg" filterable class="ml20 noMl">
         <el-option v-for='item in topData.yjjg' :key="item" :label="item" :value="item"></el-option>
       </el-select>
-      <el-select collapse-tags clearable size="small" v-model="searchParam.rate" placeholder="所有评级" filterable class="ml20">
+      <el-select collapse-tags clearable size="small" v-model="searchParam.rate" placeholder="评级" filterable class="ml20">
         <el-option v-for='item in topData.rate' :key="item" :label="item" :value="item"></el-option>
       </el-select>
       <el-date-picker v-model="searchParam.processDateStart" type="date" placeholder="开始日期" class="ml20"></el-date-picker>
@@ -34,14 +34,14 @@
           <span style="color: #0d308c; cursor: pointer; font" @click='showPDF(scope.row.Atturl)'>{{scope.row.CodeName ? ("【 "+ scope.row.CodeName +" 】" + scope.row.Title) : scope.row.Title}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="Type" label="类型" width="120"></el-table-column>
-      <el-table-column prop="Rate" label="股票评级" min-width="70">
+      <el-table-column prop="Type" label="类型" width="150"></el-table-column>
+      <el-table-column prop="Rate" label="评级" width="120">
         <template slot-scope="scope">
           <div>{{scope.row.Rate == "" ? "--" : scope.row.Rate}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="Org" label="研究机构" width="160"></el-table-column>
-      <el-table-column prop="Auth" label="研报作者" width="160" show-overflow-tooltip>
+      <el-table-column prop="Org" label="研究机构" width="180"></el-table-column>
+      <el-table-column prop="Auth" label="研报作者" width="180" show-overflow-tooltip>
         <template slot-scope="scope">
           <div>{{scope.row.Auth == "" ? "--" : scope.row.Auth}}</div>
         </template>
@@ -841,22 +841,17 @@ export default {
 
       // 包含所有关键字
       let titleMust = (that.searchParam.titleMust && encodeURI(that.searchParam.titleMust)) || '[]'
-
       // 可以包含关键字
       let titleCan = (that.searchParam.titleCan && encodeURI(that.searchParam.titleCan)) || '[]'
-
       // 不包含任意关键字
       let titleNot = (that.searchParam.titleNot && encodeURI(that.searchParam.titleNot)) || '[]'
-
       // 公司代码
       let stockCode = this.searchParam.spliteStockCode || '[]'
-      var apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + this.zPager.currentPage + '/' + this.zPager.size
-
-      // let stockCode = this.searchParam.spliteStockCode || '[]' // 公司代码
-      // let yjjg = (this.searchParam.yjjg && encodeURI(this.searchParam.yjjg)) || '[]' // 研究机构
-      // let author = (this.searchParam.author && encodeURI(this.searchParam.author)) || '[]' // 研报作者
-      // let rate = (this.searchParam.rate && encodeURI(this.searchParam.rate)) || '[]' // 研报作者
-      // apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + yjjg + '/' + author + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + rate + '/' + this.zPager.currentPage + '/' + this.zPager.size
+      // 研究机构
+      let yjjg = (this.searchParam.yjjg && encodeURI(this.searchParam.yjjg)) || '[]'
+      // 评级
+      let rate = (this.searchParam.rate && encodeURI(this.searchParam.rate)) || '[]'
+      var apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + yjjg + '/' + rate + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax.get(apiPath)
         .then(res => {
           var r = res.data
@@ -873,6 +868,7 @@ export default {
 
       // 结束时间
       this.searchParam.processDateEnd = this.searchParam.processDateEnd && this.dealDate(this.searchParam.processDateEnd)
+
       // 处理公司代码
       if (this.searchParam && this.searchParam.stock_code.length > 0) {
         if (this.searchParam.stock_code.length > 1) {
