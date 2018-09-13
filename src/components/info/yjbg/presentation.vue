@@ -34,19 +34,19 @@
           <span style="color: #0d308c; cursor: pointer; font" @click='showPDF(scope.row.Atturl)'>{{scope.row.CodeName ? ("【 "+ scope.row.CodeName +" 】" + scope.row.Title) : scope.row.Title}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="Type" label="类型" width="150"></el-table-column>
+      <el-table-column prop="Type" label="类型" width="200"></el-table-column>
       <el-table-column prop="Rate" label="评级" width="120">
         <template slot-scope="scope">
           <div>{{scope.row.Rate == "" ? "--" : scope.row.Rate}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="Org" label="研究机构" width="180"></el-table-column>
-      <el-table-column prop="Auth" label="研报作者" width="180" show-overflow-tooltip>
+      <el-table-column prop="Org" label="研究机构" width="200"></el-table-column>
+      <el-table-column prop="Auth" label="研报作者" width="200" show-overflow-tooltip>
         <template slot-scope="scope">
           <div>{{scope.row.Auth == "" ? "--" : scope.row.Auth}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="ReportDate" label="发布日期" width="150"></el-table-column>
+      <el-table-column prop="ReportDate" label="发布日期" width="200"></el-table-column>
     </el-table>
     <!-- 表格数据结束 -->
 
