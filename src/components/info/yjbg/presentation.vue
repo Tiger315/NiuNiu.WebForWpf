@@ -34,7 +34,6 @@
           <span style="color: #0d308c; cursor: pointer; font" @click='showPDF(scope.row.Atturl)'>{{scope.row.CodeName ? ("【 "+ scope.row.CodeName +" 】" + scope.row.Title) : scope.row.Title}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="Type" label="类型" width="200"></el-table-column>
       <el-table-column prop="Rate" label="评级" width="120">
         <template slot-scope="scope">
           <div>{{scope.row.Rate == "" ? "--" : scope.row.Rate}}</div>
