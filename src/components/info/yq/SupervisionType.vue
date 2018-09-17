@@ -92,7 +92,7 @@ export default {
           that.resourceArr = response.data.Result.Data
         })
     },
-    loadTableDetail () {
+    loadTableDetail (flag) {
       if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
         if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
           this.$message.error('开始时间不能大于结束时间！')
@@ -101,6 +101,7 @@ export default {
       }
       var that = this
       var api = that.apiPath + 'DynamicNews/Pager'
+      that.loading = true
       this.getSearchParam()
       api = api + '/' + (this.searchParam.titleMust || '[]') + '/' + (this.searchParam.titleCan || '[]') + '/' + (this.searchParam.titleNot || '[]') + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + (this.searchSourceNu || '[]') + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax
@@ -109,6 +110,10 @@ export default {
           that.loading = false
           that.violationCase = response.data.Result.Data
           that.zPager.total = response.data.Result.Total
+          if (flag === 1) {
+            const selectWrap = that.$('.el-table__body-wrapper')
+            selectWrap.scrollTop(0)
+          }
         })
         .catch(function () {
           that.loading = false
@@ -116,7 +121,7 @@ export default {
     },
     dealDateFormate (row) {
       let date = row.News_Date
-      let dates = date.split(' ')[0]
+      let dates = date.split('T')[0]
       return dates
     },
     getSearchParam () {

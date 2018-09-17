@@ -132,7 +132,7 @@ export default {
       let dates = date.split(' ')[0]
       return dates
     },
-    getList () {
+    getList (flag) { // flag 标记是通过翻页点击查询，这里需要重置滚动条的高度
       var that = this
       if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
         if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
@@ -150,6 +150,14 @@ export default {
           var data = response.data.Result
           that.tableData = data.Data
           that.zPager.total = data.Total
+          if (flag === 1) {
+            const selectWrap = that.$('.el-table__body-wrapper')
+            selectWrap.scrollTop(0)
+          }
+        })
+        .catch(res => {
+          that.$message.error('搜索异常, 请联系Admin')
+          that.loadingData.loading = false
         })
     },
     getSearchParam () {
@@ -201,7 +209,7 @@ export default {
         })
     },
     pagerChange () {
-      this.getList()
+      this.getList(1)
     }
   },
   created () {

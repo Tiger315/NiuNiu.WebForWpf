@@ -27,7 +27,7 @@
     <!-- 搜索条件结束 -->
 
     <!-- 表格数据开始 -->
-    <el-table v-loading.loading="loadingData.loading" element-loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
+    <el-table  id="data-list-content" v-loading.loading="loadingData.loading" element-loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
       <el-table-column type="index" fixed="left" label="序号" width="70" :index="typeIndex">序号</el-table-column>
       <el-table-column fixed="left" prop="Title" label="研报标题" min-width="350" fit show-overflow-tooltip>
         <template slot-scope="scope">
@@ -828,7 +828,7 @@ export default {
       this.urlData.showWordUrl = ''
       this.dialog = false
     },
-    getList () {
+    getList (flag) { // flag 标记是通过翻页点击查询，这里需要重置滚动条的高度
       if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
         if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
           this.$message.error('开始时间不能大于结束时间！')
@@ -839,7 +839,7 @@ export default {
       let that = this
       that.loadingData.loading = true
       that.getSearchParam()
-
+      this.trimStr(this.searchParam) // 遍历去掉搜索条件的收尾空格
       // 包含所有关键字
       let titleMust = (that.searchParam.titleMust && encodeURIComponent(that.searchParam.titleMust)) || '[]'
       // 可以包含关键字
@@ -863,6 +863,10 @@ export default {
             that.zPager.total = r.Result.Total
           }
           that.loadingData.loading = false
+          if (flag === 1) {
+            const selectWrap = that.$('.el-table__body-wrapper')
+            selectWrap.scrollTop(0)
+          }
         })
         .catch(res => {
           that.$message.error('搜索异常, 请联系Admin')
@@ -872,10 +876,8 @@ export default {
     getSearchParam () {
       // 开始时间
       this.searchParam.processDateStart = this.searchParam.processDateStart && this.dealDate(this.searchParam.processDateStart)
-
       // 结束时间
       this.searchParam.processDateEnd = this.searchParam.processDateEnd && this.dealDate(this.searchParam.processDateEnd)
-
       // 处理公司代码
       if (this.searchParam && this.searchParam.stock_code.length > 0) {
         if (this.searchParam.stock_code.length > 1) {
@@ -896,7 +898,8 @@ export default {
         })
     },
     pagerChange () {
-      this.getList()
+      // table回到顶部
+      this.getList(1)
     }
   },
   created () {
@@ -911,7 +914,6 @@ export default {
       })()
     }
   }
-
 }
 </script>
 <style>

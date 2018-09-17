@@ -273,6 +273,14 @@ export default {
           that.loadingData.loading = false
           that.detailData.violationCaseData = response.data.Result.Data
           that.searchParam.total = response.data.Result.Total
+          if (flag === 1) {
+            const selectWrap = that.$('.el-table__body-wrapper')
+            selectWrap.scrollTop(0)
+          }
+        })
+        .catch(res => {
+          that.$message.error('搜索异常, 请联系Admin')
+          that.loadingData.loading = false
         })
     },
     processDate (row) {
@@ -280,7 +288,7 @@ export default {
       return date
     },
     pagerChange () {
-      this.searchList()
+      this.searchList(1)
     },
     getSearchParam () {
       // 获取查询的参数
