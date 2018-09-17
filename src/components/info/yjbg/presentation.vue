@@ -4,7 +4,7 @@
     <el-container style="margin-bottom:10px; padding:0 10% 0 0;">
       <el-input placeholder="包含所有关键词(以空格区分)" v-model="searchParam.titleMust" size="small" clearable class="ml20 noMl"></el-input>
       <el-input placeholder="包含任意关键词(以空格区分)" v-model="searchParam.titleCan" size="small" clearable class="ml20"></el-input>
-      <el-input placeholder="不包含任意关键词(以空格区分)" v-model="searchParam.titleNot" size="small" clearable class="ml20"></el-input>
+      <el-input placeholder="不包含所有关键词(以空格区分)" v-model="searchParam.titleNot" size="small" clearable class="ml20"></el-input>
       <el-select multiple collapse-tags clearable size="small" v-model="searchParam.stock_code" placeholder="公司代码、简称" filterable class="ml20">
         <el-option :label="item.Name+'('+item.Code+')'" :key="item.Name+'('+item.Code+')'" v-for='item in topData.companyCode' :value="item.Code"></el-option>
       </el-select>
