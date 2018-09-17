@@ -841,19 +841,19 @@ export default {
       that.getSearchParam()
 
       // 包含所有关键字
-      let titleMust = (that.searchParam.titleMust && encodeURI(that.searchParam.titleMust)) || '[]'
+      let titleMust = (that.searchParam.titleMust && encodeURIComponent(that.searchParam.titleMust)) || '[]'
       // 可以包含关键字
-      let titleCan = (that.searchParam.titleCan && encodeURI(that.searchParam.titleCan)) || '[]'
+      let titleCan = (that.searchParam.titleCan && encodeURIComponent(that.searchParam.titleCan)) || '[]'
       // 不包含任意关键字
-      let titleNot = (that.searchParam.titleNot && encodeURI(that.searchParam.titleNot)) || '[]'
+      let titleNot = (that.searchParam.titleNot && encodeURIComponent(that.searchParam.titleNot)) || '[]'
       // 公司代码
       let stockCode = this.searchParam.spliteStockCode || '[]'
       // 研究机构
-      let yjjg = (this.searchParam.yjjg && encodeURI(this.searchParam.yjjg)) || '[]'
+      let yjjg = (this.searchParam.yjjg && encodeURIComponent(this.searchParam.yjjg)) || '[]'
       // 评级
-      let rate = (this.searchParam.rate && encodeURI(this.searchParam.rate)) || '[]'
+      let rate = (this.searchParam.rate && encodeURIComponent(this.searchParam.rate)) || '[]'
       // 研报作者
-      let author = (this.searchParam.author && encodeURI(this.searchParam.author)) || '[]'
+      let author = (this.searchParam.author && encodeURIComponent(this.searchParam.author)) || '[]'
       var apiPath = that.apiPath + 'Yjbg/' + titleMust + '/' + titleCan + '/' + titleNot + '/' + stockCode + '/' + yjjg + '/' + rate + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + author + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax.get(apiPath)
         .then(res => {
