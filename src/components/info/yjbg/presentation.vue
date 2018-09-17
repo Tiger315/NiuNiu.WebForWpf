@@ -849,7 +849,7 @@ export default {
       // 公司代码
       let stockCode = this.searchParam.spliteStockCode || '[]'
       // 研究机构
-      let yjjg = (this.searchParam.yjjg && encodeURIComponent(this.searchParam.yjjg)) || '[]'
+      let yjjg = (this.searchParam.yjjg && encodeURIComponent(this.searchParam.yjjg.replace('&', 'amp;'))) || '[]'
       // 评级
       let rate = (this.searchParam.rate && encodeURIComponent(this.searchParam.rate)) || '[]'
       // 研报作者
@@ -865,7 +865,7 @@ export default {
           that.loadingData.loading = false
         })
         .catch(res => {
-          that.$message.error('搜索异常')
+          that.$message.error('搜索异常, 请联系Admin')
           that.loadingData.loading = false
         })
     },
