@@ -835,11 +835,10 @@ export default {
           return
         }
       }
-
       let that = this
       that.loadingData.loading = true
       that.getSearchParam()
-      this.trimStr(this.searchParam) // 遍历去掉搜索条件的收尾空格
+      this.trimStr(this.searchParam) // 遍历去掉搜索条件的首尾空格
       // 包含所有关键字
       let titleMust = (that.searchParam.titleMust && encodeURIComponent(that.searchParam.titleMust)) || '[]'
       // 可以包含关键字

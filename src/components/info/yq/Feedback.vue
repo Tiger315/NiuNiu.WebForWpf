@@ -140,6 +140,7 @@ export default {
           return
         }
       }
+      that.trimStr(this.searchParam) // 遍历去掉搜索条件的首尾空格
       that.getSearchParam()
       that.loadingData.loading = true
       var apiPath = ''

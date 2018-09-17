@@ -102,7 +102,8 @@ export default {
       var that = this
       var api = that.apiPath + 'DynamicNews/Pager'
       that.loading = true
-      this.getSearchParam()
+      that.getSearchParam()
+      that.trimStr(this.searchParam) // 遍历去掉搜索条件的首尾空格
       api = api + '/' + (this.searchParam.titleMust || '[]') + '/' + (this.searchParam.titleCan || '[]') + '/' + (this.searchParam.titleNot || '[]') + '/' + (this.searchParam.processDateStart || '[]') + '/' + (this.searchParam.processDateEnd || '[]') + '/' + (this.searchSourceNu || '[]') + '/' + this.zPager.currentPage + '/' + this.zPager.size
       that.$ajax
         .get(api)

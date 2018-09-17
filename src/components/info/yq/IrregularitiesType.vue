@@ -255,6 +255,7 @@ export default {
       this.loadingData.loading = true
       var that = this
       that.getSearchParam()
+      that.trimStr(this.searchParam) // 遍历去掉搜索条件的首尾空格
       var treeCode = this.treeCode || encodeURI('[]')
       var titleMust = (that.searchParam.titleMust && encodeURI(that.searchParam.titleMust)) || encodeURI('[]')
       var titleCan = (that.searchParam.titleCan && encodeURI(that.searchParam.titleCan)) || encodeURI('[]')
