@@ -864,6 +864,10 @@ export default {
           }
           that.loadingData.loading = false
         })
+        .catch(res => {
+          that.$message.error('搜索异常')
+          that.loadingData.loading = false
+        })
     },
     getSearchParam () {
       // 开始时间
