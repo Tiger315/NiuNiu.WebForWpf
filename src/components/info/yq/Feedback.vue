@@ -178,7 +178,7 @@ export default {
       this.dialog = true
     },
     showWord (urls) { // 展示word
-      var Idx = urls.indexOf('pdf')
+      var Idx = urls.indexOf('.pdf')
       if (Idx === -1) {
         this.urlData.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
         this.dialog = true
