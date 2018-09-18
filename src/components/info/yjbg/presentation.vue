@@ -861,7 +861,7 @@ export default {
             that.tableData = r.Result.Data
             that.zPager.total = r.Result.Total
           } else {
-            that.$message.error('搜索异常, 请重新搜索')
+            that.$message.error(r.Description)
           }
           that.loadingData.loading = false
           if (flag === 1) {
