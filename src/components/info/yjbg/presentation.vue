@@ -27,7 +27,7 @@
     <!-- 搜索条件结束 -->
 
     <!-- 表格数据开始 -->
-    <el-table  id="data-list-content" v-loading.loading="loadingData.loading" element-loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
+    <el-table id="data-list-content" v-loading.loading="loadingData.loading" element-loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
       <el-table-column type="index" fixed="left" label="序号" width="70" :index="typeIndex">序号</el-table-column>
       <el-table-column fixed="left" prop="Title" label="研报标题" min-width="350" fit show-overflow-tooltip>
         <template slot-scope="scope">
@@ -45,7 +45,7 @@
           <div>{{scope.row.Auth == "" ? "--" : scope.row.Auth}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="ReportDate" label="发布日期" width="200"></el-table-column>
+      <el-table-column prop="ReportDate" label="发布日期" width="160"></el-table-column>
     </el-table>
     <!-- 表格数据结束 -->
 
@@ -860,6 +860,8 @@ export default {
           if (r.Code === 1000) {
             that.tableData = r.Result.Data
             that.zPager.total = r.Result.Total
+          } else {
+            that.$message.error('搜索异常, 请联系Admin')
           }
           that.loadingData.loading = false
           if (flag === 1) {
