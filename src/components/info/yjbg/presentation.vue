@@ -25,13 +25,15 @@
       <el-button type="warning" size="small" style="margin-left: 20px;" @click="clearParam">清空搜索</el-button>
     </el-container>
     <!-- 搜索条件结束 -->
-
+    <form style="display:none;" id="myForm" action=''>
+        <input type="submit" id="myFormBtn" value="提交">
+    </form>
     <!-- 表格数据开始 -->
     <el-table id="data-list-content" v-loading.loading="loadingData.loading" element-loading-text="拼命加载中" :height="dataHeight" :data="tableData" stripe style="width: 100%;" empty-text=" " row-key="id">
       <el-table-column type="index" fixed="left" label="序号" width="70" :index="typeIndex">序号</el-table-column>
       <el-table-column fixed="left" prop="Title" label="研报标题" min-width="350" fit show-overflow-tooltip>
         <template slot-scope="scope">
-          <span style="color: #0d308c; cursor: pointer; font" @click='showPDF(scope.row.Atturl)'>{{scope.row.CodeName ? ("【 "+ scope.row.CodeName +" 】" + scope.row.Title) : scope.row.Title}}</span>
+          <span style="color: #0d308c; cursor: pointer; font"  @click='showPDF(scope.row.Atturl)'>{{scope.row.CodeName ? ("【 "+ scope.row.CodeName +" 】" + scope.row.Title) : scope.row.Title}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="Rate" label="评级" width="120">
@@ -91,7 +93,8 @@ export default {
       },
       urlData: {
         'pdfUrl': '',
-        'showWordUrl': ''
+        'showWordUrl': '',
+        'excelUrl': ''
       },
       topData: {
         yjjg: [
@@ -811,19 +814,25 @@ export default {
     },
     showPDF (urls) {
       var Idx = urls.indexOf('.pdf')
+      var isExcel = urls.indexOf('.xls')
       // 判断如果不是pdf文件，调用word
-      if (Idx === -1) {
+      if (Idx === -1 && isExcel === -1) {
         this.showWord(urls)
+        this.dialog = true
+      } else if (isExcel >= 0) {
+        document.getElementById('myForm').setAttribute('action', urls)
+        document.getElementById('myFormBtn').click()
       } else {
         this.urlData.pdfUrl = urls
+        this.dialog = true
       }
-      this.dialog = true
     },
     showWord (urls) {
       this.urlData.showWordUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + urls
     },
 
     beforeClose () {
+      this.urlData.excelUrl = ''
       this.urlData.pdfUrl = ''
       this.urlData.showWordUrl = ''
       this.dialog = false
