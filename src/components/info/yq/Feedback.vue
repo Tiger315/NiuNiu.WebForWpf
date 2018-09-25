@@ -134,6 +134,9 @@ export default {
     },
     getList (flag) { // flag 标记是通过翻页点击查询，这里需要重置滚动条的高度
       var that = this
+      if (flag !== 1) {
+        this.zPager.currentPage = 1
+      }
       if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
         if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
           this.$message.error('开始时间不能大于结束时间！')

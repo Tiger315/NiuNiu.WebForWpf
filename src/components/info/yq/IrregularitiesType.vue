@@ -237,6 +237,9 @@ export default {
       this.getDetail(this.searchId)
     },
     searchList (flag) { // flag标记是否是点击左侧的tree加载表格
+      if (flag !== 1) {
+        this.searchParam.currentPage = 1
+      }
       if (flag && flag !== -1) {
         this.treeCode = flag.Code
         this.titleActive = false

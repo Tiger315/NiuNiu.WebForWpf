@@ -93,6 +93,9 @@ export default {
         })
     },
     loadTableDetail (flag) {
+      if (flag !== 1) {
+        this.zPager.currentPage = 1
+      }
       if (this.searchParam.processDateStart && this.searchParam.processDateEnd) {
         if (this.searchParam.processDateStart > this.searchParam.processDateEnd) {
           this.$message.error('开始时间不能大于结束时间！')
